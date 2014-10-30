@@ -1,0 +1,88 @@
+@CHARSET "UTF-8";
+.moreBtn {
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+	background-color:#ededed;
+	-webkit-border-top-left-radius:4px;
+	-moz-border-radius-topleft:4px;
+	border-top-left-radius:4px;
+	-webkit-border-top-right-radius:4px;
+	-moz-border-radius-topright:4px;
+	border-top-right-radius:4px;
+	-webkit-border-bottom-right-radius:4px;
+	-moz-border-radius-bottomright:4px;
+	border-bottom-right-radius:4px;
+	-webkit-border-bottom-left-radius:4px;
+	-moz-border-radius-bottomleft:4px;
+	border-bottom-left-radius:4px;
+	text-indent:-5px;
+	border:2px solid #dcdcdc;
+	display:inline-block;
+	color:#777777;
+	font-family:arial;
+	font-size:13px;
+	font-weight:bold;
+	font-style:normal;
+	height:32px;
+	line-height:38px;
+	width:430px;
+	text-decoration:none;
+	text-align:center;
+}
+.moreBtn:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+	background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+	background-color:#dfdfdf;
+}.moreBtn:active {
+	position:relative;
+	top:1px;
+}
+
+#blog_top {
+	width: 700px;
+	height: 25px; 
+	border-bottom : 2px solid rgb(139,139,139); 
+	padding-left: 10px; 
+	padding-top: 5px; 
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+
+#blog_main {
+	width: 700px; 
+	height: 280px; 
+	border-bottom: 1px solid;
+}
+
+#moreLink:LINK {
+	text-decoration: none;
+	color: rgb(139,139,139);
+}
+
+#moreLink:VISITED {
+	text-decoration: none;
+	color: rgb(139,139,139);
+}
+
+#moreLink:LINK {
+	text-decoration: none;
+	color: rgb(139,139,139);
+}
+
+.pp_div {
+	width: 700px; 
+	border-bottom: 1px solid silver;
+	padding-bottom:10px; 
+	margin-top: 10px;
+}
+
+.pp_table {
+	width:700px; 
+	font-size: 10pt; 
+	color: rgb(139,139,139);
+}
