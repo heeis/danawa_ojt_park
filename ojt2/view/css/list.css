@@ -1,0 +1,58 @@
+@CHARSET "UTF-8";
+
+.h_tr {
+	background-color: silver;
+}
+
+td {
+	word-break:break-all;
+	
+}
+
+#main {
+	width: 100%;
+}
+
+#content_top {
+	width: 100%; 
+	height: 50px;
+	margin-bottom: 20px;
+}
+
+#content_left {
+	float: left;
+	width: 45%;
+}
+
+#content_right {
+	float: right;
+	width: 55%;
+}
+
+#search_btn {
+	width: 60px; 
+	height: 25px;
+}
+
+#excel_btn {
+	width: 100px; 
+	height: 25px;
+}
+
+#left_table {
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10xp;
+}
+
+#right_table {
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10xp;
+}
+
+#leftPageDiv, #rightPageDiv {
+	text-align: center;
+	margin-top: 10px;
+}
+
