@@ -171,6 +171,18 @@
 		function blogStandardInfo($stanCode) {
 			return $this->standardDAO->blogStandardInfo($stanCode);
 		}
+		
+		function excelStandardCount($stanCode) {
+			return $this->standardDAO->excelStandardCount($stanCode);
+		}
+		
+		function excelStandardInsert($stanCode, $cateCode, $stanName) {
+			$this->standardDAO->excelStandardInsert($stanCode, $cateCode, $stanName);
+		}
+		
+		function excelStandardUpdate($stanCode, $cateCode, $stanName) {
+			$this->standardDAO->excelStandardUpdate($stanCode, $cateCode, $stanName);
+		}
 	}
 	
 	

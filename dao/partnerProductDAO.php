@@ -286,16 +286,16 @@ class partnerProductDAO {
 		if ($sort != '0_0') {
 			$sortQuery = " ORDER BY ";
 			$sarr = split('_', $sort);
-	
+		
 			if ($sarr[0]=='1') {
 				$sortQuery = $sortQuery . "partnerproductname ASC ";
 			} else if ($sarr[0]=='2') {
 				$sortQuery = $sortQuery . "partnerproductname DESC ";
 			}
-	
+				
 			if ($sarr[0]!='0' && $sarr[1]!='0')
 				$sortQuery = $sortQuery . ", ";
-	
+				
 			if ($sarr[1]=='1') {
 				$sortQuery = $sortQuery . "partnerproductdate ASC ";
 			} else if ($sarr[1]=='2' || $sarr[0]='0') {
@@ -324,7 +324,7 @@ class partnerProductDAO {
 							tpartnerInfo p
 							ON (t1.partnerCode = p.partnerCode)
 					  WHERE
-					  		AND t1.categoryCode = ?".$sortQuery."LIMIT ?, ?";
+					  		t1.categoryCode = ?".$sortQuery."LIMIT ?, ?";
 		} else {
 			$query = "SELECT
 							partnername,
@@ -348,7 +348,7 @@ class partnerProductDAO {
 					  INNER JOIN
 							tpartnerInfo p
 							ON (t1.partnerCode = p.partnerCode)
-					  WHERE t1.categoryCode = ? ORDER BY partnerproductdate DESC LIMIT ?, ?;";
+					  WHERE t1.categoryCode = ? ORDER BY partnerproductdate DESC LIMIT ?, ?";
 		}
 	
 		$stmt = mysqli_prepare($this->link, $query);
@@ -380,18 +380,18 @@ class partnerProductDAO {
 			$sarr = split('_', $sort);
 		
 			if ($sarr[0]=='1') {
-				$sortQuery = $sortQuery . "partnerproductname ASC ";
+				$sortQuery = $sortQuery . "partnerProductName ASC ";
 			} else if ($sarr[0]=='2') {
-				$sortQuery = $sortQuery . "partnerproductname DESC ";
+				$sortQuery = $sortQuery . "partnerProductName DESC ";
 			}
 		
 			if ($sarr[0]!='0' && $sarr[1]!='0')
 				$sortQuery = $sortQuery . ", ";
 		
 			if ($sarr[1]=='1') {
-				$sortQuery = $sortQuery . "partnerproductdate ASC ";
+				$sortQuery = $sortQuery . "partnerProductDate ASC ";
 			} else if ($sarr[1]=='2' || $sarr[0]='0') {
-				$sortQuery = $sortQuery . "partnerproductdate DESC ";
+				$sortQuery = $sortQuery . "partnerProductDate DESC ";
 			}
 			$query = "SELECT
 							partnername,
@@ -416,7 +416,7 @@ class partnerProductDAO {
 							tpartnerInfo p
 							ON (t1.partnerCode = p.partnerCode)
 					  WHERE
-					  		AND t2.standardCode = ?".$sortQuery."LIMIT ?, ?";
+					  		t2.standardCode = ?".$sortQuery."LIMIT ?, ?";
 		} else {
 			$query = "SELECT
 							partnername,
@@ -440,7 +440,7 @@ class partnerProductDAO {
 					  INNER JOIN
 							tpartnerInfo p
 							ON (t1.partnerCode = p.partnerCode)
-					  WHERE t2.standardCode = ? ORDER BY partnerproductdate DESC LIMIT ?, ?;";
+					  WHERE t2.standardCode = ? ORDER BY partnerproductdate DESC LIMIT ?, ?";
 		}
 		
 		$stmt = mysqli_prepare($this->link, $query);
@@ -539,6 +539,40 @@ class partnerProductDAO {
 		$res = array($res1, $res2);
 		
 		return $res;
+	}
+	
+	function blogMarketTotal($stanCode, $market) {
+		if($market == 'ALL') {
+			$query = "SELECT
+						COUNT(*)
+				  FROM
+						tpartnerProductInfo t1 INNER JOIN tlink t2
+						ON (t1.partnerCode = t2.partnerCode AND t1.partnerProductCode = t2.partnerProductCode)
+				  WHERE
+						t2.standardCode = ?
+				  ORDER BY t1.partnerProductPrice";
+		} else {
+			$query = "SELECT
+						COUNT(*)
+				  FROM
+						tpartnerProductInfo t1 INNER JOIN tlink t2
+						ON (t1.partnerCode = t2.partnerCode AND t1.partnerProductCode = t2.partnerProductCode)
+				  WHERE
+						t2.standardCode = ? AND t2.partnerCode = ?
+				  ORDER BY t1.partnerProductPrice";
+		}
+		if($market == 'ALL') {
+			$stmt = mysqli_prepare($this->link, $query);
+			mysqli_stmt_bind_param($stmt, 'd', $stanCode);
+		} else {
+			$stmt = mysqli_prepare($this->link, $query);
+			mysqli_stmt_bind_param($stmt, 'ds', $stanCode, $market);
+		}
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_bind_result($stmt, $res1);
+		mysqli_stmt_fetch($stmt);
+	
+		return $res1;
 	}
 }
 

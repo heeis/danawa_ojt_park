@@ -128,7 +128,6 @@ function submitCheck(mode) {
 			</select> 
 		</td>
 	</tr>
-	</tr>
 	<tr>
 		<td>협력사상품 URL</td>
 		<td>

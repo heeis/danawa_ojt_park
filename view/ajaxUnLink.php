@@ -2,12 +2,22 @@
 require_once '../manager/linkManager.php';
 require_once '../mysql/mysqlConn.php';
 require_once '../program/lowestPriceProgram.php';
+require_once '../lib/DNWInput.php';
+
+$oDnwInput = new DNWInput();
+$oDnwInput->setInjectionPattern(true);
+$oDnwInput->removeInjectionPattern(array("_","/"));
+
+$aPostResult = $oDnwInput->allPost(false);
+
+
+
 $dbConn = new mysqlConn();
 $link = $dbConn->connect();
 
 $linkMgr = new linkManager($link);
 $lowestPrice = new lowestPriceProgram($link);
-$code = $_POST['code'];
+$code = $aPostResult['code'];
 
 $ppArr = split('/', $code);
 $a = '..';

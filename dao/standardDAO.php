@@ -248,6 +248,32 @@ class standardDAO {
 		$res = array($res1, $res2, $res3, $res4, $res5, $res6, $res7);
 		return $res;
 	}
+	
+	function excelStandardCount($stanCode) {
+		$stmt = mysqli_prepare($this->link, "SELECT COUNT(*) FROM tstandardInfo WHERE standardCode = ?");
+		mysqli_stmt_bind_param($stmt, 'd', $stanCode);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_bind_result($stmt, $count);
+		mysqli_stmt_fetch($stmt);
+		mysqli_stmt_close($stmt);
+		return $count;
+	}
+	
+	function excelStandardInsert($stanCode, $cateCode, $stanName) {
+		$query = "INSERT INTO tstandardInfo VALUES(?, ?, ?, 0, 0, 0, sysdate(), sysdate())";
+		$stmt = mysqli_prepare($this->link, $query);
+		mysqli_stmt_bind_param($stmt, 'dds', $stanCode, $cateCode, $stanName);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_close($stmt);
+	}
+	
+	function excelStandardUpdate($stanCode, $cateCode, $stanName) {
+		$query = "UPDATE tstandardInfo SET categorycode = ?, standardname = ?, standardmodifydate = SYSDATE() WHERE standardcode = ?";
+		$stmt = mysqli_prepare($this->link, $query);
+		mysqli_stmt_bind_param($stmt, 'dsd', $cateCode, $stanName, $stanCode);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_close($stmt);
+	}
 }
 
 

@@ -134,4 +134,8 @@ class partnerProductManager {
 	function blogListAvgTotal($stanCode) {
 		return $this->ppDAO->blogListAvgTotal($stanCode);
 	}
+	
+	function blogMarketTotal($stanCode, $market) {
+		return $this->ppDAO->blogMarketTotal($stanCode, $market);
+	}
 }

@@ -116,7 +116,7 @@ function pageSet(page, table, cateno) {
 	} else {
 		params = {'cateno':cateno, 'page':page, 'table':table, 'sort':sPartner+"_"+sDate};
 	}
-
+	//alert(sPartner+"_"+sDate);
 	$.ajax({      
         type:"POST",  
         url:"http://ojt2.com/ajaxProcess.php",      
@@ -222,10 +222,11 @@ function pageSet(page, table, cateno) {
 	        	var totalPage = Math.ceil(total/page_set);
 	        	var first_page = ((block-1)*block_set)+1;
 	        	var last_page = block*block_set;
-	
+				
 	        	var next_block = last_page+1;
 	        	var prev_block = first_page-1;
-	        	
+// 	        	alert(total);
+// 	        	alert(data[1]);
 	        	if(prev_block > 0) {
 					$("#rightPageDiv").append("<a href=javascript:pageSet('"+1+"','"+table+"','"+cateno+"')>&lt;&lt;&nbsp;</a>");
 					$("#rightPageDiv").append("<a href=javascript:pageSet('"+prev_block+"','"+table+"','"+cateno+"')>&lt;&nbsp;</a>");
@@ -247,7 +248,7 @@ function pageSet(page, table, cateno) {
 	        	///////////// 리스트 뿌려주기 //////////
 	        	$("#right_table").empty(); 
 	        	$("#right_table").append("<tr class='h_tr'>"
-	    	        	+"<td width='3%'><input type=checkbox></td>"
+	    	        	+"<td width='3%'><input type=checkbox ></td>"
 						+"<td width='11%'>협력사</td>"
 						+"<td width='10%'>카테고리</td>"
 						+"<td width='40%'><a href=javascript:listSort('unlink','partner','"+cateno+"')>협력사상품명"+updown[sPartner]+"</a></td>"
@@ -288,7 +289,7 @@ function pageSet(page, table, cateno) {
 	
 	        	var next_block = last_page+1;
 	        	var prev_block = first_page-1;
-	        	
+
 	        	if(prev_block > 0) {
 					$("#rightPageDiv").append("<a href=javascript:pageSet('"+1+"','"+table+"','"+cateno+"')>&lt;&lt;&nbsp;</a>");
 					$("#rightPageDiv").append("<a href=javascript:pageSet('"+prev_block+"','"+table+"','"+cateno+"')>&lt;&nbsp;</a>");
@@ -354,7 +355,8 @@ function pageSet(page, table, cateno) {
 	
 	        	var next_block = last_page+1;
 	        	var prev_block = first_page-1;
-	        	
+	        	/* alert(total);
+	        	alert(data[1]); */
 	        	if(prev_block > 0) {
 					$("#rightPageDiv").append("<a href=javascript:pageSet('"+1+"','"+table+"','"+cateno+"')>&lt;&lt;&nbsp;</a>");
 					$("#rightPageDiv").append("<a href=javascript:pageSet('"+prev_block+"','"+table+"','"+cateno+"')>&lt;&nbsp;</a>");
@@ -554,7 +556,7 @@ function rightImageShow(Url, e) {
   	<div id="rightImgDiv" style="position: absolute; width: 80px; height: 80px; display:none ;">
   		<img id="rightImg"  width="80" height="80" alt="" src="http://image.ojt2.com/image/logo.JPG">
   	</div>
-  	협력사 상품 <button id="part_excel_btn" disabled>엑셀 다운로드</button></a>
+  	협력사 상품 <button id="part_excel_btn" disabled>엑셀 다운로드</button>
   		<table border="1" id="right_table">
   			<tr class='h_tr'>
   				<td width="20"><input type="checkbox"></td>

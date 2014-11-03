@@ -106,7 +106,6 @@ function submitCheck() {
 			</select> 
 		</td>
 	</tr>
-	</tr>
 	<tr>
 		<td>협력사상품 URL</td>
 		<td>
@@ -118,6 +117,7 @@ function submitCheck() {
 		<td><input type="text" name="ppImageUrl" size="90"></td>
 	</tr>
 </table>
+</form>
 <p align="center">
 	<input type="button" value="추가" onclick="submitCheck()">
 	<input type="button" value="취소">
