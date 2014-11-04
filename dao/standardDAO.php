@@ -6,12 +6,6 @@ class standardDAO {
 		$this->link = $link;
 	}
 	
-	function utf8 () {
-		mysqli_query($this->link, "set session character_set_connection=utf8;");
-		mysqli_query($this->link, "set session character_set_results=utf8;");
-		mysqli_query($this->link, "set session character_set_client=utf8;");
-	}
-	
 	// 기준상품코드 최대값
 	function getMaxCode() {
 		$query = "SELECT 
@@ -25,7 +19,6 @@ class standardDAO {
 	
 	// 기준상품등록
 	function standardInsert($arr){
-		$this->utf8();	
 		$query = "INSERT 
 				  INTO 
 						  tstandardInfo 
@@ -58,7 +51,6 @@ class standardDAO {
 	
 	// 기준상품 수정
 	function standardUpdate($arr) {
-		$this->utf8();
 		$query = "UPDATE 
 						tstandardInfo 
 				  SET 
@@ -89,7 +81,7 @@ class standardDAO {
 	
 	// 기준상품 정보 불러오기
 	function standardInfo($code) {
-		$this->utf8();
+	
 		$query = "SELECT 
 						standardCode, 
 						standardName,
@@ -260,11 +252,12 @@ class standardDAO {
 	}
 	
 	function excelStandardInsert($stanCode, $cateCode, $stanName) {
-		$query = "INSERT INTO tstandardInfo VALUES(?, ?, ?, 0, 0, 0, sysdate(), sysdate())";
+		$query = "INSERT INTO tstandardInfo VALUES(?, ?, ?, 0, 0, 0, sysdate(), sysdate(), null, null, null, null, null)";
 		$stmt = mysqli_prepare($this->link, $query);
 		mysqli_stmt_bind_param($stmt, 'dds', $stanCode, $cateCode, $stanName);
 		mysqli_stmt_execute($stmt);
 		mysqli_stmt_close($stmt);
+		echo mysqli_error($this->link);
 	}
 	
 	function excelStandardUpdate($stanCode, $cateCode, $stanName) {

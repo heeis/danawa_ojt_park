@@ -1,18 +1,22 @@
 <?php
+	require_once '../mysql/mysqlConn.php';
 	require_once '../manager/standardManager.php';
 	require_once '../manager/categoryManager.php';
 	require_once '../manager/partnerManager.php';
-
-	$cateManager = new categoryManager();
-	$partnerManager = new partnerManager();
+	
+	$dbConn = new mysqlConn();
+	$link = $dbConn->connect();
+	$cateManager = new categoryManager($link);
+	$partnerManager = new partnerManager($link);
 	
 	$cateRes = $cateManager->categoryList();
 	$partRes = $partnerManager->partnerList();
 	
 	$code = $_GET['code'];
 	
-	$stanM = new standardManager();
+	$stanM = new standardManager($link);
 	$stanInfoRes = $stanM->standardInfo($code);
+
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -25,13 +29,46 @@
 function submitCheck(mode) {
 	$("input[name=mode]").attr('value', mode);
 	if(mode == 'update'){
-	 	if ($("input[name=stanname]").val() == ''){
+		if ($("input[name=stanname]").val().trim() == ''){
 			alert('상품명을 입력하세요.');
+			$("input[name=stanname]").focus();
+			return;
+		}
+		var stringRegx = /[~!@\#$%<>^&*\()\=+\']/gi; 
+		if( stringRegx.test($("input[name=stanname]").val().trim()) ){
+			alert('상품명 특수문자는 입력불가능 합니다.');
+			$("input[name=stanname]").focus();
+			return;
+		}
+		if ($("input[name=stanname]").val().trim().length > 100){
+			alert('상품명은 최대 100자까지 입력가능합니다.');
+			$("input[name=stanname]").focus();
 			return;
 		}
 		if ($("select[name=category]").val() == '[대분류]'){
 			alert('카테고리를 선택하세요.');
 			return;
+		}
+
+		// 정규식  198001~201912 까지 입력가능
+		var num_check = /^(198\d{1}|200\d|201[0-9])(0[1-9]|1[0-2])*$/;
+		if($("input[name=makedate]").val().trim() != ''){
+			if(!num_check.test($("#makedate").val())){
+				alert('예)2014년 9월 -> 201409 의 형식에 맞게 입력해주세요.');
+				$("#makedate").focus();
+				return;
+			}
+		} 
+
+		var url_check = /((http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\wㄱ-ㅎㅏ-ㅣ가-힣\;\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?)/g;
+		if($("input[name=sourceurl]").val().trim() != ''){
+			if( !url_check.test($("input[name=sourceurl]").val()) ) {
+				alert('출처URL형식에서 벗어납니다.');
+			}
+			if ($("input[name=sourceurl]").val().trim().length > 600){
+				alert('출처URL은 최대 600자까지 입력가능합니다.');
+				return;
+			}
 		}
 		
 		if ($("input[name=imagesource]:checked").val() == '협력사선택') {
@@ -39,20 +76,21 @@ function submitCheck(mode) {
 			$("input[name=imagesource]:checked").attr('value', select);
 			alert($("input[name=imagesource]:checked").val());
 		}
+
+		if ($("input[name=explain]").val().trim().length > 1000){
+			alert('설명은 최대 1000자까지 입력가능합니다.');
+			return;
+		}
 		
 		var image = $("input[name=image]").val();
 		if (image != ''){
 			var file = image.split('.');
 			file[1] = file[1].toLowerCase();
-			if(file[1] != 'jpg' && file[1] != 'jpeg' && file[1] != null) {
+			if(file[1] != 'jpg' && file[1] != null) {
 				alert("이미지파일은 jpg 만 가능합니다.");
 				return;
 			}
 		}
-		if($("input[name=makedate]").val().length > 6){
-			alert("예) 201406 으로 입력하세요."); 
-			return;
-		} 
 	} else if (mode == 'delete') {
 		if(confirm('삭제하시겠습니까?') == false) {
 			return;
@@ -113,7 +151,7 @@ function cancel() {
 	</tr>
 	<tr>
 		<td rowspan=2>상품이미지<?=$stanInfoRes[4]?></td>
-		<td><img width="50" height="50" src="http://image.ojt2.com/image/<?=$stanInfoRes[4]?>"></td>
+		<td><img width="50" height="50" src="http://image.ojt2.com/productimage/<?=$stanInfoRes[4]?>"></td>
 		<td rowspan="2">
 			<input type="radio" name="imagesource" value="" <?php if($stanInfoRes[3] == '') echo "checked='checked'";?>>없음
 			<input type="radio" name="imagesource" value="다나와제작" <?php if($stanInfoRes[3] == '다나와제작') echo "checked='checked'";?>>다나와제작 

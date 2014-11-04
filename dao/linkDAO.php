@@ -112,4 +112,14 @@ class linkDAO {
 		//echo '<br>'.$arr[0].':'.$arr[1];
 		return $arr;
 	}
+	
+	function linkCount ($stanCode) {
+		$query = "SELECT COUNT(*) FROM tlink WHERE standardCode = ?";
+		$stmt = mysqli_prepare($this->link, $query);
+		mysqli_stmt_bind_param($stmt, 'd', $stanCode);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_bind_result($stmt, $count);
+		mysqli_stmt_fetch($stmt);
+		return $count;
+	}
 }

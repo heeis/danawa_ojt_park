@@ -47,18 +47,4 @@ while ($res = mysqli_fetch_row($result)) {
 		mysqli_stmt_execute($stmt);
 		mysqli_stmt_close($stmt);
 }
-echo '1';
-$query = "SELECT 
-						ifnull(MAX(standardCode),0)+1 
-				  FROM 
-						tstandardInfo";
-$result = mysqli_query($link, $query);
-$max = mysqli_fetch_row($result);
-echo 'max : '.$max[0];
-$cate = 118;
-$a = 'crontab';
-$query = "INSERT INTO tstandardInfo VALUES(?, ?, ?, 0, 0, 0, SYSDATE(), SYSDATE(), ?, ?, ?, ?, ?)";
-$stmt = mysqli_prepare($link, $query);
-mysqli_stmt_bind_param($stmt, 'ddssssss', $max[0], $cate, $a, $a, $a, $a, $a, $a);
-mysqli_stmt_execute($stmt);
-echo '1';
+

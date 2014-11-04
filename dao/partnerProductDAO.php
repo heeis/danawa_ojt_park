@@ -30,9 +30,7 @@ class partnerProductDAO {
 		mysqli_stmt_bind_param($stmt, 'ssdssds', $req['ppCode'], $req['pCode'], $req['category'],
 							   $req['ppName'], $req['ppUrl'], $price, $req['ppImageUrl']);
 		mysqli_stmt_execute($stmt);
-		echo $req['pCode'] . '<br>';
 		$res = mysqli_stmt_affected_rows($stmt); // 성공 = 1
-		print_r($stmt);
 		mysqli_stmt_close($stmt);
 		return $res;
 	}
@@ -574,6 +572,34 @@ class partnerProductDAO {
 	
 		return $res1;
 	}
+	
+	function excelPartnerProductCount($ppCode) {
+		$stmt = mysqli_prepare($this->link, "SELECT COUNT(*) FROM tpartnerProductInfo WHERE partnerproductcode = ?");
+		mysqli_stmt_bind_param($stmt, 's', $ppCode);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_bind_result($stmt, $count);
+		mysqli_stmt_fetch($stmt);
+		mysqli_stmt_close($stmt);
+		return $count;
+	}
+	
+	function excelPartnerProductInsert($ppCode, $pCode, $cateCode, $ppName, $ppUrl, $ppPrice ) {
+		$query = "INSERT INTO tpartnerProductInfo VALUES(?, ?, ?, ?, ?, ?, SYSDATE(), SYSDATE(), null)";
+		$stmt = mysqli_prepare($this->link, $query);
+		mysqli_stmt_bind_param($stmt, 'ssdssd', $ppCode, $pCode, $cateCode, $ppName, $ppUrl, $ppPrice);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_close($stmt);
+	}
+	
+	function excelPartnerProductUpdate($ppCode, $cateCode, $ppName, $ppUrl, $ppPrice ) {
+		$query = "UPDATE tpartnerProductInfo SET categorycode = ?, partnerproductname = ?, partnerproducturl = ?, "
+				."partnerproductprice = ?, partnerproductmodifydate = SYSDATE() WHERE partnerproductcode = ?";
+		$stmt = mysqli_prepare($this->link, $query);
+		mysqli_stmt_bind_param($stmt, 'dssds', $cateCode, $ppName, $ppUrl, $ppPrice, $ppCode);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_close($stmt);
+	}
+	
 }
 
 

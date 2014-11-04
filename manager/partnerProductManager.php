@@ -138,4 +138,18 @@ class partnerProductManager {
 	function blogMarketTotal($stanCode, $market) {
 		return $this->ppDAO->blogMarketTotal($stanCode, $market);
 	}
+	
+	function excelPartnerProductCount($ppCode) {
+		return $this->ppDAO->excelPartnerProductCount($ppCode);
+	}
+	
+	function excelPartnerProductInsert($ppCode, $pCode, $cateCode, $ppName, $ppUrl, $ppPrice ) {
+		$this->ppDAO->excelPartnerProductInsert($ppCode, $pCode, $cateCode, $ppName, $ppUrl, $ppPrice);
+	}
+	
+	function excelPartnerProductUpdate($ppCode, $cateCode, $ppName, $ppUrl, $ppPrice ) {
+		$this->ppDAO->excelPartnerProductUpdate($ppCode, $cateCode, $ppName, $ppUrl, $ppPrice);
+	}
+	
+	
 }

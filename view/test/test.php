@@ -1,5 +1,18 @@
 
 <?php
+echo filter_var("http://itempage3.auction.co.kr/BrandDetailView.aspx?itemno=A859349062", FILTER_VALIDATE_URL) . "<br>";
+
+echo filter_var("http://deal.11st.co.kr/product/SellerProductDetail.tmall?method=getSellerProductDetail&prdNo=1147164438", FILTER_VALIDATE_URL)  . "<br>";
+
+echo filter_var("ht", FILTER_VALIDATE_URL)  . "<br>";
+
+if(filter_var("tp://itempage3.auction.co.krBrandDetailView.aspx?itemno=A859349062", FILTER_VALIDATE_URL)){
+	echo '?';
+} else {
+	echo '@@@';
+}
+
+exit;
 echo 1234;
 require_once '../manager/partnerProductManager.php';
 

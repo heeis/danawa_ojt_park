@@ -17,7 +17,7 @@ $linkMgr = new linkManager($link);
 
 $stanCode = $aPostResult['stanCode'];
 $pp = $aPostResult['ppCode'];
-/// pcode_ppcode/pcode_ppcode
+
 $ppArr = split('/', $pp);
 
 for($i = 0; $i < count($ppArr); $i++) {

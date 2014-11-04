@@ -17,7 +17,22 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 function parseSubmit() {
-	$('form[name=pars_frm]').submit();
+	if ($("select[name=category]").val() == '[대분류]'){
+		alert('카테고리를 선택하세요.');
+		return;
+	}
+	
+	if($('input[name=ppUrl]').val().trim() == ''){
+		alert("협력사상품 URL을 입력하세요.");
+		return;
+	}
+	var url_check = /((http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\wㄱ-ㅎㅏ-ㅣ가-힣\;\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?)/g;
+	if( !url_check.test($("input[name=ppUrl]").val()) ) {
+		alert('Url형식에서 벗어납니다.');
+		return;
+	}
+	alert("전송");
+	//$('form[name=pars_frm]').submit();
 }
 function cancel() {
 	location.href='productlink.php';
@@ -50,7 +65,7 @@ function cancel() {
 			<td>카테고리</td>
 			<td>
 				<select size=7 name="category" style="width: 400px;">
-				<option selected="selected">[대분류]</option>
+				<option selected="selected" value="[대분류]">[대분류]</option>
 				<?php 
   					while ($res = mysqli_fetch_row($cateRes)) {
   				?>

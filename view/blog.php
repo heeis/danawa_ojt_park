@@ -5,18 +5,24 @@
 
 	require_once '../manager/standardManager.php';
 	require_once '../manager/partnerProductManager.php';
+	require_once '../manager/linkManager.php';
 	require_once '../mysql/mysqlConn.php';
 	$db_conn = new mysqlConn();
 	$link = $db_conn->connect();
 	
 	$stanMgr = new standardManager($link);
 	$ppMgr = new partnerProductManager($link);
+	$linkMgr = new linkManager($link);
 	
 	$stanCode = $_GET['stanCode'];
 	
 	$stanInfoResult = $stanMgr->blogStandardInfo($stanCode);
-	$ppListResult = $ppMgr->blogProductList($stanCode, 1, 'ALL');
-	$ppTotalAvg = $ppMgr->blogListAvgTotal($stanCode);
+	
+	$linkCount = $linkMgr->linkCount($stanCode);
+	if($linkCount != 0) {
+		$ppListResult = $ppMgr->blogProductList($stanCode, 1, 'ALL');
+		$ppTotalAvg = $ppMgr->blogListAvgTotal($stanCode);
+	} 
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -29,6 +35,7 @@
 <script type="text/javascript">
 var market='ALL';
 var stanCode = <?=$stanInfoResult[6]?>;
+var minPrice = <?=$ppListResult[0][1]?>;
 function addList(page) {
 		//alert(page);
 	$.ajax({      
@@ -41,20 +48,27 @@ function addList(page) {
         	var totalPage = Math.ceil(total/20);
         	
         	for(var i = 0; i < data[0].length; i++) {
-            	var price = setComma(data[0][i][1]);
+        		var price = setComma(data[0][i][1]);
+				var str;
+            	if(minPrice==data[0][i][1]){
+					str = "<td width='60%'><b style='color: rgb(226,16,3);'>"+price+"원</b></td>"
+            	} else {
+            		str = "<td width='60%'><b>"+price+"원</b></td>"
+            	}
+            	var date = data[0][i][3].substring(0, 10).replace(/-/gi,'.');
 				$("#ppList_div").append("<div class='pp_div'>"
 			  	+"<table  class='pp_table'>"
 			  	+"<tr>"
 			  	+"<td width='20%' align='center'><img src='http://img.danawa.com/cmpny_info/images/"+data[0][i][2]+"_logo.gif'></td>"
-			  		+"<td width='60%'><b>"+price+"원</b></td>"
+			  		+ str
 			  		+"<td width='20%' align='center' rowspan='3'><a href='"+data[0][i][4]+"' target='_blank'><img src='test/btn.jpg'><a></td>"
 			  		+"</tr>"
 			  		+"<tr>"
 			  		+"<td></td>"
-			  		+"<td><b>"+data[0][i][0]+"</b></td>"
+			  		+"<td><b style='color: rgb(99,99,99);'>"+data[0][i][0]+"</b></td>"
 			  		+"</tr>"
 			  		+"<tr>"
-			  		+"<td align='center'>2014.08.23</td>"
+			  		+"<td align='center'>"+date+"</td>"
 			  		+"</tr>"
 			  		+"</table>"
 			  		+"</div>");
@@ -106,7 +120,7 @@ function winOpen() {
   <div id="blog_main">
   	<div style="float:left; width: 210px; height: 250px; margin-left: 10px;">
   		<div style="width: 210px; padding-left: 22px;">
-  			<img width="170" height="170" src="test/p.jpg">
+  			<img width="170" height="170" src="http://image.ojt2.com/image/<?=$stanInfoResult[2] == '' ? 'noimage.gif' : $stanInfoResult[2]?>">
   		</div>
   		<div style="width: 210px;">
   		<p align="center" style="font-size: 8pt; color: rgb(139,139,139);">
@@ -119,20 +133,24 @@ function winOpen() {
   			$year = substr($stanInfoResult[4], 0, 4);
   			$month = substr($stanInfoResult[4], 4, 2);
   		?>
-  		등록년월 <?=$stanInfoResult[4]!='' ? $year . '-' . $month : '정보없음' ?>
+  		등록년월 <?=$stanInfoResult[4]!='' ? $year . '.' . $month : '정보없음' ?>
   		</p>
   		</div>
   	</div>
   	<div style="float:right; width: 450px; height: auto;">
+  
   		<div style="width: 450px; height: 40px;">
   			<p style="font-weight:bold; ">
   			<?=$stanInfoResult[1] ?>
   			</p>
   		</div>
+  		<?php 
+  	if($linkCount != 0){
+  	?>
   		<div style="width: 450px; height: 50px;">
   			<img src="http://img.danawa.com/cmpny_info/images/<?=$ppListResult[0][2] ?>_logo.gif">
   			<font style="font-size: 26pt; font-weight: bold; margin-left: 10px; margin-right: 30px; color:rgb(139,139,139)">
-  				<?=$ppListResult[0][1]?>원
+  				<?=number_format($ppListResult[0][1])?>원
   			</font> 
   			<a href="<?=$ppListResult[0][4]?>" target="_blank"><img src="test/btn.jpg"></a>
   		</div>
@@ -144,8 +162,8 @@ function winOpen() {
   				?>
   					<tr>
   					<td><img height="22" src="http://img.danawa.com/cmpny_info/images/<?=$ppListResult[$i][2] ?>_logo.gif"></td>
-  					<td width="90" align="right"><?=$ppListResult[$i][1]?> 원</td>
-  					<td width="90" align="right" style="color:rgb(139,139,139)">+<?=$ppListResult[$i][1]-$ppListResult[0][1]?>원</td>
+  					<td width="90" align="right"><?=number_format($ppListResult[$i][1])?> 원</td>
+  					<td width="90" align="right" style="color:rgb(139,139,139)">+<?=number_format($ppListResult[$i][1]-$ppListResult[0][1])?>원</td>
   				</tr>
   				<?php 
   				}
@@ -161,6 +179,15 @@ function winOpen() {
   			<span style="border-left: 1px solid rgb(139,139,139);" >&nbsp;<img src="test/plus.gif">&nbsp;</span>
   			</div>
   		</div>
+  	<?php 
+  	} else {
+  	?>
+  		<div>
+  			<img width="450" height="160" alt="" src="test/img6.jpg" style="margin-bottom: 10px;">
+  		</div>	
+  	<?php 
+  	}
+  	?>
   		<div style="color: rgb(139,139,139);">
   		<?=$stanInfoResult[5]!='' ? $stanInfoResult[5] : '' ?>
   		</div>
@@ -169,7 +196,7 @@ function winOpen() {
   <div id="market_div" style="width: 700px; margin-bottom: 10px;">
   	<div style="width: 690px; height: 32px; margin-top: 5px; background-color: rgb(245,245,245); padding-top: 11px; padding-left: 10px; border-top: 2px solid rgb(233,233,233); border-bottom: 2px solid rgb(233,233,233);  color:rgb(27,27,27);">
   	<b>> 오픈마켓</b> 
-  	<select id="market_select" onchange="changeMarket()">
+  	<select id="market_select" onchange="changeMarket()" <?php if($linkCount == 0) echo "disabled='disabled'";?>>
   		<option value="ALL">쇼핑몰선택</option>
   		<option value="TH201">11번가</option>
   		<option value="EE715">옥션</option>
@@ -180,21 +207,30 @@ function winOpen() {
   </div>
   <div id="ppList_div" style="width: 700px;">
   <?php 
+  if($linkCount != 0){
   	foreach ($ppListResult as $res) {
   ?>
   	<div class="pp_div">
   	<table  class="pp_table">
   		<tr>
   			<td width="20%" align="center"><img src="http://img.danawa.com/cmpny_info/images/<?=$res[2] ?>_logo.gif"></td>
+  			 
+  			<?php if($res[1] == $ppListResult[0][1]) { ?>
+  			<td width="60%"><b style="color: rgb(226,16,3);"><?=number_format($res[1])?>원</b></td>
+  			<?php } else { ?>
   			<td width="60%"><b><?=number_format($res[1])?>원</b></td>
+  			<?php }?>
   			<td width="20%" align="center" rowspan="3"><a href="<?=$res[4]?>" target="_blank"><img src="test/btn.jpg"></a></td>
   		</tr>
   		<tr>
   			<td></td>
-  			<td><b><?=$res[0]?></b></td>
+  			<td><b style="color: rgb(99,99,99);"><?=$res[0]?></b></td>
   		</tr>
   		<tr>
-  			<?php $date = substr($res[3],0,10); //.slice(2,10); ?>
+  			<?php 
+  				  $date = substr($res[3],0,10); 
+  				  $date = str_replace("-", ".", $date);
+  			?>
   			<td align="center"><?=$date?></td>
   		</tr>
   	</table>
@@ -210,6 +246,7 @@ function winOpen() {
   	<a id="more_a" href="javascript:addList('2')" class="moreBtn">상품더보기</a>
   </div>
   <?php 
+  }
   }
   ?>
   <div style="width:670px; border-top: 2px solid; font-size:8pt; color: rgb(139,139,139); padding-left: 30px;">

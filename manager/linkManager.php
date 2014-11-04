@@ -42,4 +42,8 @@ class linkManager {
 	function linkLinkage($maxCode, $ppCode, $pCode) {
 		return $this->linkDAO->linkLinkage($maxCode, $ppCode, $pCode);
 	}
+	
+	function linkCount ($stanCode) {
+		return $this->linkDAO->linkCount($stanCode);
+	}
 }

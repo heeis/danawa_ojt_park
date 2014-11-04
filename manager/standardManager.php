@@ -29,9 +29,7 @@
 			
 			if($files['name'] != null) {
 				$filename = $maxCode . "_00.jpg";
-			} else {
-				$filename = 'noimage.jpg';
-			}
+			} 
 			$arr = array(
 					'categoryCode'=>$req['category'],
 					'standardName'=>$req['stanname'],
@@ -48,7 +46,7 @@
 			
 			if($files['name'] != null) {
 				// 파일업로드
-				$dir =  "/var/www/upload/image/";
+				$dir =  "/var/www/upload/productimage/";
 				$filename = $maxCode . "_00.jpg"; // 원본파일 코드_00 
 				$uploadfile = $dir . $filename;
 					
@@ -76,9 +74,23 @@
 				imagejpeg($new_img, $dir . $maxCode . "_80.jpg"); // 썸네일 이미지는 원본업로드 파일명 앞에 thum을 추가 후 저장
 			
 			}
-			
 			return $res;
 		}
+		function parsStandardInsert($arr) {
+
+			$arr = array(
+					'categoryCode'=>$arr['category'],
+					'standardName'=>$arr['stanname'],
+					'standardImageSource'=>null,
+					'standardImage'=>null,
+					'standardSourceUrl'=>null,
+					'standardMakeDate'=>null,
+					'standardExplain'=>null,
+					'maxCode'=>$arr['maxCode']
+			);
+			return $this->standardDAO->standardInsert($arr);
+		}
+		
 		
 		// 기준상품정보
 		function standardInfo($code) {
@@ -88,12 +100,13 @@
 		
 		// 기준상품수정
 		function standardModify($req, $files) {
-			$filename = $req['stancode'] . "_00";
+			echo "<br>". $req['category'] ."<br>";
+			$filename = $req['stancode'] . "_00.jpg";
 			if($files['name'] != null) {
+				echo '이미지업로드';
 				// 파일업로드
-				$dir =  "/var/www/upload/image/";
-				//$filename = $req['stancode'] . "_00"; // 원본파일 코드_00 
-				$file = substr(strrchr($files['name'],"."),1);
+				$dir =  "/var/www/upload/productimage/";
+				
 				$uploadfile = $dir . $filename;
 			
 				if(($files['error'] > 0) || ($files['size'] <= 0)){
@@ -116,16 +129,18 @@
 				
 				$origin_img = imagecreatefromjpeg($uploadfile);
 				imagecopyresampled($new_img, $origin_img, 0, 0, 0, 0, 80, 80, $oldsize[0], $oldsize[1]);
-				imagejpeg($new_img, $dir . $req['stancode'] . "_80"); // 썸네일 이미지는 원본업로드 파일명 앞에 thum을 추가 후 저장
+				imagejpeg($new_img, $dir . $req['stancode'] . "_80.jpg"); // 썸네일 이미지는 원본업로드 파일명 앞에 thum을 추가 후 저장
 				
+			} else {
+				$filename = $req['imagesource'];
 			}
-			echo '이미지값 : '.$filename;
+			echo '이미지값 : '.$filename.'  category : '.$req['category']."<br>";
 			$arr = array(
 					'standardCode'=>$req['stancode'],
 					'categoryCode'=>$req['category'],
 					'standardName'=>$req['stanname'],
-					'standardImageSource'=>$req['imagesource'],
-					'standardImage'=>$filename,
+					'standardImageSource'=>$filename,
+					'standardImage'=>$req['oldimage'],
 					'standardSourceUrl'=>$req['sourceurl'],
 					'standardMakeDate'=>$req['makedate'],
 					'standardExplain'=>$req['explain']

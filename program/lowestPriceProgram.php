@@ -14,17 +14,7 @@ class lowestPriceProgram {
 			$this->link = $link;
 		}
 	}
-/* 	
-	function __call($method, $code1, $code2) {
-		if($method == 'callLowestPrice') {
-			if(is_int($code1)){
-				echo '여기' . $code1.':'. $code2;
-			} else {
-				echo '여기2' . $code1.':'. $code2;
-			}
-		}
-	}
-	 */
+
 	// 최저가, 평균, 업체수
 	function lowestPrice($standardCode) {
 		$query = "SELECT
