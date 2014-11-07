@@ -861,8 +861,8 @@ class DNWInput
 		$this->checkByte = $checkByte;
 	}
 }
-
 /* 
+
 require_once 'com/danawa/web/util/DNWInput.php';	// GET, POST, COOKIE 값에 대한 XSS, sql injection 체크	
 require 
 include

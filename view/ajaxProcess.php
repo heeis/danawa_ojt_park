@@ -1,17 +1,26 @@
 <?php
 require_once '../manager/standardManager.php';
 require_once '../manager/partnerProductManager.php';
+require_once '../mysql/mysqlConn.php';
+require_once '../lib/DNWInput.php';
 
-$stanManager = new standardManager();
-$ppManager = new partnerProductManager();
+$oDnwInput = new DNWInput();
+$oDnwInput->setInjectionPattern(true);
+$oDnwInput->removeInjectionPattern(array("/","_"));
+$aPostResult = $oDnwInput->allPost(false);
+
+$dbConn = new mysqlConn();
+$link = $dbConn->connect();
+$stanManager = new standardManager($link);
+$ppManager = new partnerProductManager($link);
 
 $page_set = 20;
 
-$cate = $_POST['cateno'];
-$page = $_POST['page'];
-$table = $_POST['table'];
-$sort = $_POST['sort'];
-$stanCode = $_POST['stancode'];
+$cate = $aPostResult['cateno'];
+$page = $aPostResult['page'];
+$table = $aPostResult['table'];
+$sort = $aPostResult['sort'];
+$stanCode = $aPostResult['stancode'];
 
 $sortQuery ="";
 if (!$page)

@@ -17,11 +17,22 @@ $pListRes = $pManager->partnerList();
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 function submitCheck() {
-	if($("input[name=ppCode]").val() == ''){
+	var str_ppcode = /[A-Za-z0-9]/g;  
+	if($("input[name=ppCode]").val().trim() == ''){
 		alert("협력사상품코드를 입력하세요.");
 		$("input[name=ppCode]").focus();
 		return;
+	} else if ($("input[name=ppCode]").val().trim().length <= 100){
+		if(!str_ppcode.test($("input[name=ppCode]").val().trim())){
+			alert("협력사상품코드는 영문/숫자 만 입력가능합니다.");
+			$("input[name=ppCode]").focus();
+			return;
+		}
+	} else {
+		alert('협력사상품코드는 최대 100자까지 입력가능합니다.');
+		return;	
 	}
+	
 	if($("select[name=pCode]").val() == '협력사선택'){
 		alert("협력사코드를 선택하세요.");
 		return;
@@ -31,21 +42,36 @@ function submitCheck() {
 		$("input[name=ppPrice]").focus();
 		return;
 	}
-	if($("input[name=ppName]").val() == ''){
+	if($("input[name=ppName]").val().trim() == ''){
 		alert("협력사상품명를 입력하세요.");
 		$("input[name=ppName]").focus();
+		return;
+	} else if ($("input[name=ppName]").val().trim().length > 255){
+		alert('출처URL은 최대 255자까지 입력가능합니다.');
 		return;
 	}
 	if($("select[name=category]").val() == '[대분류]'){
 		alert("카테고리를 선택하세요.");
 		return;
 	}
-	if($("input[name=ppUrl]").val() == ''){
-		alert("협력사상품URL을 입력하세요.");
-		$("input[name=ppUrl]").focus();
-		return;
+
+	var url_check = /((http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\wㄱ-ㅎㅏ-ㅣ가-힣\;\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?)/g;
+	if ($("input[name=ppUrl]").val().trim().length != 0) {
+		if( !url_check.test($("input[name=ppUrl]").val()) ) {
+			alert('출처URL형식에서 벗어납니다.');
+			return;
+		}
+		if ($("input[name=ppUrl]").val().trim().length > 600){
+			alert('출처URL은 최대 600자까지 입력가능합니다.');
+			return;
+		}
 	}
+	
 	$("form[name=pp_frm]").submit();
+}
+
+function cancel() {
+	window.history.back()
 }
 </script>
 </head>
@@ -59,7 +85,7 @@ function submitCheck() {
 <div style="height:auto; width: 100%; margin: 0 auto;">
 <center>
 <p align="left" style="margin-left: 15%;">
-	# 협력사상품등록<a href="partnerProductModify.php?ppCode=AA1234&pCode=PM727">수정테스트</a>
+	# 협력사상품등록
 </p>
 <form name=pp_frm enctype="multipart/form-data" action="partnerProductProcess.php" method="post">
 <input type="hidden" name="mode" value="insert">
@@ -106,7 +132,6 @@ function submitCheck() {
 			</select> 
 		</td>
 	</tr>
-	</tr>
 	<tr>
 		<td>협력사상품 URL</td>
 		<td>
@@ -118,9 +143,10 @@ function submitCheck() {
 		<td><input type="text" name="ppImageUrl" size="90"></td>
 	</tr>
 </table>
+</form>
 <p align="center">
 	<input type="button" value="추가" onclick="submitCheck()">
-	<input type="button" value="취소">
+	<input type="button" value="취소" onclick="cancel()">
 </p>
 </center>
 </div>

@@ -40,5 +40,14 @@
 	    }
     ?>
     </td>
+    <td>
+    <?php 
+	    if ($page == 'excelupload.php') {
+	    	echo "엑셀 업로드";
+	    } else {
+	    	echo "<a href='excelupload.php'>엑셀 업로드</a> | ";
+	    }
+    ?>
+    </td>
   </tr>
 </table>

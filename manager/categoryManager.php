@@ -21,5 +21,16 @@
 			$result = $this->cateDAO->categodyList();
 			return $result;
 		}
-
+		
+		function excelCount($cateCode) {
+			return $this->cateDAO->excelCount($cateCode);
+		}
+		
+		function excelInsert ($cateCode, $cateName) {
+			$this->cateDAO->excelInsert($cateCode, $cateName);
+		}
+		
+		function excelUpload ($cateCode, $cateName) {
+			$this->cateDAO->excelUpload($cateCode, $cateName);
+		}
 	}

@@ -3,8 +3,6 @@
 	require_once '../lib/DNWInput.php';
 	$standardManager = new standardManager();
 	
-	echo '이미지 1 : '.$_POST['oldimage'];
-	
 	$oDnwInput = new DNWInput();
 	$oDnwInput->setInjectionPattern(true);
 	$oDnwInput->removeInjectionPattern(array(".",":","/","?","_")); // URL에서 . : / ?
@@ -15,7 +13,6 @@
 	if ($mode == 'insert') {
 		// mime check
 		if($_FILES['image']['name']!=null) {
-			echo '이미지';
 			if (mime_content_type($_FILES['image']['tmp_name']) != 'image/jpeg') {
 				echo "<script>alert('상품이미지는 jpg 파일만 가능합니다.'); location.href='standard.php';</script>";
 				exit();
@@ -30,7 +27,6 @@
 	} else if ($mode == 'update') {
 		// mime check
 		if($_FILES['image']['name']!=null) {
-			echo '이미지';
 			if (mime_content_type($_FILES['image']['tmp_name']) != 'image/jpeg') {
 				echo "<script>alert('상품이미지는 jpg 파일만 가능합니다.'); location.href='standard.php';</script>";
 				exit();

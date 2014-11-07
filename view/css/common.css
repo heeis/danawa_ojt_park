@@ -4,3 +4,11 @@ body {
 	font-family: 돋움;
 	font-size: 10pt;
 }
+
+table {
+	border-collapse: collapse;
+}
+
+tr {
+	height: 22px;
+}

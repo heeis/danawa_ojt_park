@@ -17,4 +17,27 @@ class partnerDAO {
 		$result = mysqli_query($this->link, $query);
 		return $result;
 	}
+	
+	function excelPartnerCount($partCode) {
+		$stmt = mysqli_prepare($this->link, "SELECT COUNT(*) FROM tpartnerInfo WHERE partnerCode = ?");
+		mysqli_stmt_bind_param($stmt, 's', $arr[0]);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_bind_result($stmt, $count);
+		mysqli_stmt_fetch($stmt);
+		return $count;
+	}
+	
+	function excelPartnerInsert($partCode, $partName) {
+		$query = "INSERT INTO tpartnerInfo VALUES(?, ?)";
+		$stmt = mysqli_prepare($this->link, $query);
+		mysqli_stmt_bind_param($stmt, 'ss', $partCode, $partName);
+		mysqli_stmt_execute($stmt);
+	}
+	
+	function excelPartnerUpdate ($partCode, $partName) {
+		$query = "UPDATE tpartnerInfo SET partnerName = ? WHERE partnerCode = ?";
+		$stmt = mysqli_prepare($this->link, $query);
+		mysqli_stmt_bind_param($stmt, 'ss', $partName, $partCode);
+		mysqli_stmt_execute($stmt);
+	}
 }

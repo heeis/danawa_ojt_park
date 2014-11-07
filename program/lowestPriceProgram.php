@@ -14,17 +14,7 @@ class lowestPriceProgram {
 			$this->link = $link;
 		}
 	}
-/* 	
-	function __call($method, $code1, $code2) {
-		if($method == 'callLowestPrice') {
-			if(is_int($code1)){
-				echo '여기' . $code1.':'. $code2;
-			} else {
-				echo '여기2' . $code1.':'. $code2;
-			}
-		}
-	}
-	 */
+
 	// 최저가, 평균, 업체수
 	function lowestPrice($standardCode) {
 		$query = "SELECT
@@ -43,9 +33,7 @@ class lowestPriceProgram {
 		mysqli_stmt_execute($stmt);
 		mysqli_stmt_bind_result($stmt, $avg, $min, $count);
 		mysqli_stmt_fetch($stmt);
-		//print_r($stmt);
 		mysqli_stmt_close($stmt);
-		echo '<br>low:'.$avg .':'. $min .':'. $count;
 		
 		$query = "UPDATE 
 						tstandardInfo 

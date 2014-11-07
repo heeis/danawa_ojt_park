@@ -15,5 +15,20 @@ class mysqlConn {
 		mysqli_query($link,"set session character_set_client=utf8;");
 		return $link;
 	}
+	
+	public function tranStart() {
+		mysqli_query($link, "SET AUTOCOMMIT=0");
+		mysqli_query($link, "BEGIN");
+	}
+	
+	public function commit() {
+		mysqli_query($link, "COMMIT");
+	}
+	
+	public function rollback() {
+		mysqli_query($link, "ROLLBACK");
+	}
+	
+	
 }
 	

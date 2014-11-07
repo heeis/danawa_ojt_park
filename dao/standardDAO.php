@@ -6,12 +6,6 @@ class standardDAO {
 		$this->link = $link;
 	}
 	
-	function utf8 () {
-		mysqli_query($this->link, "set session character_set_connection=utf8;");
-		mysqli_query($this->link, "set session character_set_results=utf8;");
-		mysqli_query($this->link, "set session character_set_client=utf8;");
-	}
-	
 	// 기준상품코드 최대값
 	function getMaxCode() {
 		$query = "SELECT 
@@ -25,7 +19,6 @@ class standardDAO {
 	
 	// 기준상품등록
 	function standardInsert($arr){
-		$this->utf8();	
 		$query = "INSERT 
 				  INTO 
 						  tstandardInfo 
@@ -37,7 +30,6 @@ class standardDAO {
 							$arr['standardSourceUrl'], $arr['standardMakeDate'], $arr['standardExplain']);
 		mysqli_stmt_execute($stmt);
 		$res = mysqli_stmt_affected_rows($stmt);
-		print_r($stmt);
 		mysqli_stmt_close($stmt);
 		return $res;
 	}
@@ -58,7 +50,6 @@ class standardDAO {
 	
 	// 기준상품 수정
 	function standardUpdate($arr) {
-		$this->utf8();
 		$query = "UPDATE 
 						tstandardInfo 
 				  SET 
@@ -67,7 +58,8 @@ class standardDAO {
 						standardModifyDate = SYSDATE(),
 			   			standardImageSource = ?, 
 						standardImage = ?, 
-						standardSourceUrl = ?, standardMakeDate = ?, 
+						standardSourceUrl = ?, 
+						standardMakeDate = ?, 
 						standardExplain = ?
 			   	  WHERE 
 						standardCode = ?";
@@ -82,14 +74,13 @@ class standardDAO {
 								$arr['standardExplain'], 
 								$arr['standardCode']);
 		$res = mysqli_stmt_execute($stmt);
-		print_r($stmt);
 		mysqli_stmt_close($stmt);
 		return $res;
 	}
 	
 	// 기준상품 정보 불러오기
 	function standardInfo($code) {
-		$this->utf8();
+	
 		$query = "SELECT 
 						standardCode, 
 						standardName,
@@ -247,6 +238,33 @@ class standardDAO {
 		mysqli_stmt_fetch($stmt);
 		$res = array($res1, $res2, $res3, $res4, $res5, $res6, $res7);
 		return $res;
+	}
+	
+	function excelStandardCount($stanCode) {
+		$stmt = mysqli_prepare($this->link, "SELECT COUNT(*) FROM tstandardInfo WHERE standardCode = ?");
+		mysqli_stmt_bind_param($stmt, 'd', $stanCode);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_bind_result($stmt, $count);
+		mysqli_stmt_fetch($stmt);
+		mysqli_stmt_close($stmt);
+		return $count;
+	}
+	
+	function excelStandardInsert($stanCode, $cateCode, $stanName) {
+		$query = "INSERT INTO tstandardInfo VALUES(?, ?, ?, 0, 0, 0, sysdate(), sysdate(), null, null, null, null, null)";
+		$stmt = mysqli_prepare($this->link, $query);
+		mysqli_stmt_bind_param($stmt, 'dds', $stanCode, $cateCode, $stanName);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_close($stmt);
+		echo mysqli_error($this->link);
+	}
+	
+	function excelStandardUpdate($stanCode, $cateCode, $stanName) {
+		$query = "UPDATE tstandardInfo SET categorycode = ?, standardname = ?, standardmodifydate = SYSDATE() WHERE standardcode = ?";
+		$stmt = mysqli_prepare($this->link, $query);
+		mysqli_stmt_bind_param($stmt, 'dsd', $cateCode, $stanName, $stanCode);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_close($stmt);
 	}
 }
 

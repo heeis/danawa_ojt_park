@@ -57,6 +57,16 @@ function cate_search() { // 검색버튼
 	sDate = 0;
 	cateNo = cate;
 	stancode = '';
+	if(tableMode == 'link') {
+		$("#link_btn").attr("disabled","disabled");
+		$("#unlink_btn").removeAttr("disabled");
+	} else if (tableMode == 'unlink') {
+		$("#unlink_btn").attr("disabled","disabled");
+		$("#link_btn").removeAttr("disabled");
+	} else if (tableMode == 'selectLink') {
+		$("#link_btn").attr("disabled","disabled");
+		$("#unlink_btn").removeAttr("disabled");
+	}
 	pageSet('1','left',cate);
 	pageSet('1', tableMode, cate);
 	//id="stan_excel_btn" onclick="stanDown()
@@ -68,38 +78,48 @@ function cate_search() { // 검색버튼
 
 function listSort(table, sort, cateno) {
 	if(sort == 'product') {
-		if (sProduct == 0 || sProduct == 2) {
+		if (sProduct == 0) {
 			sProduct = 1;
-		} else {
+		} else if (sProduct == 1){
 			sProduct = 2;
+		} else if (sProduct == 2) {
+			sProduct = 0;
 		}
 	}
 	if(sort == 'price') {
-		if (sPrice == 0 || sPrice == 2) {
+		if (sPrice == 0) {
 			sPrice = 1;
-		} else {
+		} else if (sPrice == 1){
 			sPrice = 2;
+		} else if (sPrice == 2) {
+			sPrice = 0;
 		}
 	}
 	if(sort == 'count') {
-		if (sCount == 0 || sCount == 2) {
+		if (sCount == 0) {
 			sCount = 1;
-		} else {
+		} else if (sCount == 1){
 			sCount = 2;
+		} else if (sCount == 2) {
+			sCount = 0;
 		}
 	}
 	if(sort == 'partner') {
-		if (sPartner == 0 || sPartner == 2) {
+		if (sPartner == 0) {
 			sPartner = 1;
-		} else {
+		} else if (sPartner == 1){
 			sPartner = 2;
+		} else if (sPartner == 2) {
+			sPartner = 0;
 		}
 	}
 	if(sort == 'date') {
-		if (sDate == 0 || sDate == 2) {
+		if (sDate == 0) {
 			sDate = 1;
-		} else {
+		} else if (sDate == 1){
 			sDate = 2;
+		} else if (sDate == 2) {
+			sDate = 0;
 		}
 	} 
 	pageSet('1',table,cateno);
@@ -116,7 +136,7 @@ function pageSet(page, table, cateno) {
 	} else {
 		params = {'cateno':cateno, 'page':page, 'table':table, 'sort':sPartner+"_"+sDate};
 	}
-
+	//alert(sPartner+"_"+sDate);
 	$.ajax({      
         type:"POST",  
         url:"http://ojt2.com/ajaxProcess.php",      
@@ -182,8 +202,8 @@ function pageSet(page, table, cateno) {
 								   +"<td width=48%><a href='standardModify.php?code="+data[1][i][0]+"'>"+data[1][i][2]+"</a></td>"
 								   +"<td onmouseover=leftImageShow('"+data[1][i][0]+"',this) onmouseout=leftImageShow('"+data[1][i][0]+"',this)>ⓘ</td>"
 								   +"<td><a href='blog.php?stanCode="+data[1][i][0]+"' target=_blank>ⓤ</td>"
-								   +"<td>"+data[1][i][3]+"</td>"
-								   +"<td>"+data[1][i][4]+"</td>"
+								   +"<td>"+setComma(data[1][i][3])+"</td>"
+								   +"<td>"+setComma(data[1][i][4])+"</td>"
 								   +"<td>"+data[1][i][5]+"</td>"
 								   +"</tr>");
 			        	} else if(tableMode == 'unlink') {
@@ -192,8 +212,8 @@ function pageSet(page, table, cateno) {
 								   +"<td width=48%><a href='standardModify.php?code="+data[1][i][0]+"'>"+data[1][i][2]+"</a></td>"
 								   +"<td onmouseover=leftImageShow('"+data[1][i][0]+"',this) onmouseout=leftImageShow('"+data[1][i][0]+"',this)>ⓘ</td>"
 								   +"<td><a href='blog.php?stanCode="+data[1][i][0]+"' target=_blank>ⓤ</td>"
-								   +"<td>"+data[1][i][3]+"</td>"
-								   +"<td>"+data[1][i][4]+"</td>"
+								   +"<td>"+setComma(data[1][i][3])+"</td>"
+								   +"<td>"+setComma(data[1][i][4])+"</td>"
 								   +"<td>"+data[1][i][5]+"</td>"
 								   +"<td><input type='radio' name=table_radio value="+data[1][i][0]+"></td>"
 								   +"</tr>");
@@ -203,8 +223,8 @@ function pageSet(page, table, cateno) {
 								   +"<td width=48%><a href='standardModify.php?code="+data[1][i][0]+"'>"+data[1][i][2]+"</a></td>"
 								   +"<td onmouseover=leftImageShow('"+data[1][i][0]+"',this) onmouseout=leftImageShow('"+data[1][i][0]+"',this)>ⓘ</td>"
 								   +"<td><a href='blog.php?stanCode="+data[1][i][0]+"' target=_blank>ⓤ</td>"
-								   +"<td>"+data[1][i][3]+"</td>"
-								   +"<td>"+data[1][i][4]+"</td>"
+								   +"<td>"+setComma(data[1][i][3])+"</td>"
+								   +"<td>"+setComma(data[1][i][4])+"</td>"
 								   +"<td>"+data[1][i][5]+"</td>"
 								   +"<td><input type='radio' name=table_radio value="+data[1][i][0]+" onclick='stanSelect()'></td>"
 								   +"</tr>");
@@ -222,10 +242,11 @@ function pageSet(page, table, cateno) {
 	        	var totalPage = Math.ceil(total/page_set);
 	        	var first_page = ((block-1)*block_set)+1;
 	        	var last_page = block*block_set;
-	
+				
 	        	var next_block = last_page+1;
 	        	var prev_block = first_page-1;
-	        	
+// 	        	alert(total);
+// 	        	alert(data[1]);
 	        	if(prev_block > 0) {
 					$("#rightPageDiv").append("<a href=javascript:pageSet('"+1+"','"+table+"','"+cateno+"')>&lt;&lt;&nbsp;</a>");
 					$("#rightPageDiv").append("<a href=javascript:pageSet('"+prev_block+"','"+table+"','"+cateno+"')>&lt;&nbsp;</a>");
@@ -247,7 +268,7 @@ function pageSet(page, table, cateno) {
 	        	///////////// 리스트 뿌려주기 //////////
 	        	$("#right_table").empty(); 
 	        	$("#right_table").append("<tr class='h_tr'>"
-	    	        	+"<td width='3%'><input type=checkbox></td>"
+	    	        	+"<td width='3%'><input id='m_check' onclick='checkAll()' type=checkbox ></td>"
 						+"<td width='11%'>협력사</td>"
 						+"<td width='10%'>카테고리</td>"
 						+"<td width='40%'><a href=javascript:listSort('unlink','partner','"+cateno+"')>협력사상품명"+updown[sPartner]+"</a></td>"
@@ -269,7 +290,7 @@ function pageSet(page, table, cateno) {
 								+"<td><a href='partnerProductModify.php?pCode="+data[1][i][7]+"&ppCode="+data[1][i][8]+"'>"+data[1][i][2]+"</a></td>"
 								+"<td onmouseover=rightImageShow('"+data[1][i][3]+"',this) onmouseout=rightImageShow('null',this)>ⓘ</td>"
 								+"<td><a href="+data[1][i][4]+" target=_blank>ⓤ</td>"
-								+"<td>"+data[1][i][5]+"</td>"
+								+"<td>"+setComma(data[1][i][5])+"</td>"
 								+"<td>"+date+"</td>"+
 								"</tr>");
 		        	}
@@ -288,7 +309,7 @@ function pageSet(page, table, cateno) {
 	
 	        	var next_block = last_page+1;
 	        	var prev_block = first_page-1;
-	        	
+
 	        	if(prev_block > 0) {
 					$("#rightPageDiv").append("<a href=javascript:pageSet('"+1+"','"+table+"','"+cateno+"')>&lt;&lt;&nbsp;</a>");
 					$("#rightPageDiv").append("<a href=javascript:pageSet('"+prev_block+"','"+table+"','"+cateno+"')>&lt;&nbsp;</a>");
@@ -310,7 +331,7 @@ function pageSet(page, table, cateno) {
 	        	///////////// 리스트 뿌려주기 //////////
 	        	$("#right_table").empty(); 
 	        	$("#right_table").append("<tr class='h_tr'>"
-	        			+"<td width='3%'><input type=checkbox></td>"
+	        			+"<td width='3%'><input type=checkbox id='m_check' onclick='checkAll()'></td>"
 						+"<td width='11%'>협력사</td>"
 						+"<td width='10%'>카테고리</td>"
 						+"<td width='40%'><a href=javascript:listSort('link','partner','"+cateno+"')>협력사상품명"+updown[sPartner]+"</a></td>"
@@ -332,7 +353,7 @@ function pageSet(page, table, cateno) {
 								+"<td><a href='partnerProductModify.php?pCode="+data[1][i][7]+"&ppCode="+data[1][i][8]+"'>"+data[1][i][2]+"</a></td>"
 								+"<td onmouseover=rightImageShow('"+data[1][i][3]+"',this) onmouseout=rightImageShow('null',this)>ⓘ</td>"
 								+"<td><a href="+data[1][i][4]+" target=_blank>ⓤ</td>"
-								+"<td>"+data[1][i][5]+"</td>"
+								+"<td>"+setComma(data[1][i][5])+"</td>"
 								+"<td>"+date+"</td>"+
 								"</tr>");
 						/* t1.partnerCode, 7
@@ -354,7 +375,8 @@ function pageSet(page, table, cateno) {
 	
 	        	var next_block = last_page+1;
 	        	var prev_block = first_page-1;
-	        	
+	        	/* alert(total);
+	        	alert(data[1]); */
 	        	if(prev_block > 0) {
 					$("#rightPageDiv").append("<a href=javascript:pageSet('"+1+"','"+table+"','"+cateno+"')>&lt;&lt;&nbsp;</a>");
 					$("#rightPageDiv").append("<a href=javascript:pageSet('"+prev_block+"','"+table+"','"+cateno+"')>&lt;&nbsp;</a>");
@@ -376,7 +398,7 @@ function pageSet(page, table, cateno) {
 	        	///////////// 리스트 뿌려주기 //////////
 	        	$("#right_table").empty(); 
 	        	$("#right_table").append("<tr class='h_tr'>"
-	        			+"<td width='3%'><input type=checkbox></td>"
+	        			+"<td width='3%'><input type=checkbox id='m_check' onclick='checkAll()'></td>"
 						+"<td width='11%'>협력사</td>"
 						+"<td width='10%'>카테고리</td>"
 						+"<td width='40%'><a href=javascript:listSort('selectLink','partner','"+cateno+"')>협력사상품명"+updown[sPartner]+"</a></td>"
@@ -399,7 +421,7 @@ function pageSet(page, table, cateno) {
 								+"<td><a href='partnerProductModify.php?pCode="+data[1][i][7]+"&ppCode="+data[1][i][8]+"'>"+data[1][i][2]+"</a></td>"
 								+"<td onmouseover=rightImageShow('"+data[1][i][3]+"',this) onmouseout=rightImageShow('null',this)>ⓘ</td>"
 								+"<td><a href="+data[1][i][4]+" target=_blank>ⓤ</td>"
-								+"<td>"+data[1][i][5]+"</td>"
+								+"<td>"+setComma(data[1][i][5])+"</td>"
 								+"<td>"+date+"</td>"+
 								"</tr>");
 		        	}
@@ -410,6 +432,14 @@ function pageSet(page, table, cateno) {
             alert('error : '+e.responseText);  
         }  
 	});
+}
+
+function checkAll() {
+	if($("input[id=m_check]").is(":checked")){
+		$("input[name=table_check]:checkbox").attr("checked", true);
+	} else {
+		$("input[name=table_check]:checkbox").attr("checked", false);
+	}
 }
 
 function link() {
@@ -423,6 +453,10 @@ function link() {
 		}
 	});
 	
+	if(ppCode == '' || stanCode ==null) {
+		 alert("기준상품과 협력사상품을 선택해주세요.")
+		 return;
+	}
 	 $.ajax({      
         type:"POST",  
         url:"http://ojt2.com/ajaxLink.php",      
@@ -470,7 +504,7 @@ function leftImageShow(stancode, e) {
 	$("#leftImgDiv").css("top", 250+e.offsetTop);
 	$("#leftImgDiv").css("left", 50+e.offsetLeft);
 	if($("#leftImgDiv").css("display") == "none"){
-		$("#leftImg").attr("src", "http://image.ojt2.com/image/"+stancode+".jpg");
+		$("#leftImg").attr("src", "http://image.ojt2.com/productimage/"+stancode+"_00.jpg");
 		$("#leftImgDiv").css("display", "block");
 	} else {
 		$("#leftImgDiv").css("display", "none");
@@ -488,6 +522,14 @@ function rightImageShow(Url, e) {
 	} else {
 		$("#rightImgDiv").css("display", "none");
 	} 
+}
+
+function setComma(num){
+	if(num==0) return 0;
+	var reg = /(^[+-]?\d+)(\d{3})/;
+	var n = (num + '');
+	while (reg.test(n)) n = n.replace(reg, '$1' + ',' + '$2');
+	return n;
 }
 
 </script>
@@ -554,7 +596,7 @@ function rightImageShow(Url, e) {
   	<div id="rightImgDiv" style="position: absolute; width: 80px; height: 80px; display:none ;">
   		<img id="rightImg"  width="80" height="80" alt="" src="http://image.ojt2.com/image/logo.JPG">
   	</div>
-  	협력사 상품 <button id="part_excel_btn" disabled>엑셀 다운로드</button></a>
+  	협력사 상품 <button id="part_excel_btn" disabled>엑셀 다운로드</button>
   		<table border="1" id="right_table">
   			<tr class='h_tr'>
   				<td width="20"><input type="checkbox"></td>
@@ -573,8 +615,8 @@ function rightImageShow(Url, e) {
   </div>
   <div style="float: left; width: 100%">
   <p align="center"> 
-  <input type="button" value="링크생성" onclick="link()">
-  <input type="button" value="링크해제" onclick="unlink()">
+  <input type="button" id="link_btn" value="링크생성" onclick="link()" disabled="disabled">
+  <input type="button" id="unlink_btn" value="링크해제" onclick="unlink()" disabled="disabled">
   </p>
   </div>
 </div>

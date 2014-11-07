@@ -21,5 +21,16 @@
 			$result = $this->partnerDAO->partnerList();		
 			return $result;
 		}
-	
+		
+		function excelPartnerCount($partCode) {
+			return $this->partnerDAO->excelPartnerCount($partCode);
+		}
+		
+		function excelPartnerInsert($partCode, $partName) {
+			$this->partnerDAO->excelPartnerInsert($partCode, $partName);
+		}
+		
+		function excelPartnerUpdate ($partCode, $partName) {
+			$this->partnerDAO->excelPartnerUpdate($partCode, $partName);
+		}
 	}

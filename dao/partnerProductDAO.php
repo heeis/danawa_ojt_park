@@ -30,9 +30,7 @@ class partnerProductDAO {
 		mysqli_stmt_bind_param($stmt, 'ssdssds', $req['ppCode'], $req['pCode'], $req['category'],
 							   $req['ppName'], $req['ppUrl'], $price, $req['ppImageUrl']);
 		mysqli_stmt_execute($stmt);
-		echo $req['pCode'] . '<br>';
 		$res = mysqli_stmt_affected_rows($stmt); // 성공 = 1
-		print_r($stmt);
 		mysqli_stmt_close($stmt);
 		return $res;
 	}
@@ -54,12 +52,11 @@ class partnerProductDAO {
 	}
 	
 	function partnerProductUpdate($req) {
-		print_r($req);
 		$this->utf8();
-		if($arr['ppPrice'] == ''){
+		if($req['ppPrice'] == ''){
 			$price = 0;
 		} else {
-			$price = $arr['ppPrice'];
+			$price = $req['ppPrice'];
 		}
 		$query = "UPDATE 
 						tpartnerProductInfo 
@@ -112,8 +109,6 @@ class partnerProductDAO {
 	}
 	
 	function partnerProductDelete($pCode, $ppCode) {
-		echo $pCode;
-		echo $ppCode;
 		$query = "DELETE FROM
 						tpartnerProductInfo
 				  WHERE
@@ -125,7 +120,7 @@ class partnerProductDAO {
 		mysqli_stmt_execute($stmt);
 		$res = mysqli_stmt_affected_rows($stmt);
 		mysqli_stmt_close($stmt);
-		echo "res : ".$res;
+	
 		return $res;
 	}
 	
@@ -286,16 +281,16 @@ class partnerProductDAO {
 		if ($sort != '0_0') {
 			$sortQuery = " ORDER BY ";
 			$sarr = split('_', $sort);
-	
+		
 			if ($sarr[0]=='1') {
 				$sortQuery = $sortQuery . "partnerproductname ASC ";
 			} else if ($sarr[0]=='2') {
 				$sortQuery = $sortQuery . "partnerproductname DESC ";
 			}
-	
+				
 			if ($sarr[0]!='0' && $sarr[1]!='0')
 				$sortQuery = $sortQuery . ", ";
-	
+				
 			if ($sarr[1]=='1') {
 				$sortQuery = $sortQuery . "partnerproductdate ASC ";
 			} else if ($sarr[1]=='2' || $sarr[0]='0') {
@@ -324,7 +319,7 @@ class partnerProductDAO {
 							tpartnerInfo p
 							ON (t1.partnerCode = p.partnerCode)
 					  WHERE
-					  		AND t1.categoryCode = ?".$sortQuery."LIMIT ?, ?";
+					  		t1.categoryCode = ?".$sortQuery."LIMIT ?, ?";
 		} else {
 			$query = "SELECT
 							partnername,
@@ -348,7 +343,7 @@ class partnerProductDAO {
 					  INNER JOIN
 							tpartnerInfo p
 							ON (t1.partnerCode = p.partnerCode)
-					  WHERE t1.categoryCode = ? ORDER BY partnerproductdate DESC LIMIT ?, ?;";
+					  WHERE t1.categoryCode = ? ORDER BY partnerproductdate DESC LIMIT ?, ?";
 		}
 	
 		$stmt = mysqli_prepare($this->link, $query);
@@ -380,18 +375,18 @@ class partnerProductDAO {
 			$sarr = split('_', $sort);
 		
 			if ($sarr[0]=='1') {
-				$sortQuery = $sortQuery . "partnerproductname ASC ";
+				$sortQuery = $sortQuery . "partnerProductName ASC ";
 			} else if ($sarr[0]=='2') {
-				$sortQuery = $sortQuery . "partnerproductname DESC ";
+				$sortQuery = $sortQuery . "partnerProductName DESC ";
 			}
 		
 			if ($sarr[0]!='0' && $sarr[1]!='0')
 				$sortQuery = $sortQuery . ", ";
 		
 			if ($sarr[1]=='1') {
-				$sortQuery = $sortQuery . "partnerproductdate ASC ";
+				$sortQuery = $sortQuery . "partnerProductDate ASC ";
 			} else if ($sarr[1]=='2' || $sarr[0]='0') {
-				$sortQuery = $sortQuery . "partnerproductdate DESC ";
+				$sortQuery = $sortQuery . "partnerProductDate DESC ";
 			}
 			$query = "SELECT
 							partnername,
@@ -416,7 +411,7 @@ class partnerProductDAO {
 							tpartnerInfo p
 							ON (t1.partnerCode = p.partnerCode)
 					  WHERE
-					  		AND t2.standardCode = ?".$sortQuery."LIMIT ?, ?";
+					  		t2.standardCode = ?".$sortQuery."LIMIT ?, ?";
 		} else {
 			$query = "SELECT
 							partnername,
@@ -440,7 +435,7 @@ class partnerProductDAO {
 					  INNER JOIN
 							tpartnerInfo p
 							ON (t1.partnerCode = p.partnerCode)
-					  WHERE t2.standardCode = ? ORDER BY partnerproductdate DESC LIMIT ?, ?;";
+					  WHERE t2.standardCode = ? ORDER BY partnerproductdate DESC LIMIT ?, ?";
 		}
 		
 		$stmt = mysqli_prepare($this->link, $query);
@@ -540,6 +535,68 @@ class partnerProductDAO {
 		
 		return $res;
 	}
+	
+	function blogMarketTotal($stanCode, $market) {
+		if($market == 'ALL') {
+			$query = "SELECT
+						COUNT(*)
+				  FROM
+						tpartnerProductInfo t1 INNER JOIN tlink t2
+						ON (t1.partnerCode = t2.partnerCode AND t1.partnerProductCode = t2.partnerProductCode)
+				  WHERE
+						t2.standardCode = ?
+				  ORDER BY t1.partnerProductPrice";
+		} else {
+			$query = "SELECT
+						COUNT(*)
+				  FROM
+						tpartnerProductInfo t1 INNER JOIN tlink t2
+						ON (t1.partnerCode = t2.partnerCode AND t1.partnerProductCode = t2.partnerProductCode)
+				  WHERE
+						t2.standardCode = ? AND t2.partnerCode = ?
+				  ORDER BY t1.partnerProductPrice";
+		}
+		if($market == 'ALL') {
+			$stmt = mysqli_prepare($this->link, $query);
+			mysqli_stmt_bind_param($stmt, 'd', $stanCode);
+		} else {
+			$stmt = mysqli_prepare($this->link, $query);
+			mysqli_stmt_bind_param($stmt, 'ds', $stanCode, $market);
+		}
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_bind_result($stmt, $res1);
+		mysqli_stmt_fetch($stmt);
+	
+		return $res1;
+	}
+	
+	function excelPartnerProductCount($ppCode) {
+		$stmt = mysqli_prepare($this->link, "SELECT COUNT(*) FROM tpartnerProductInfo WHERE partnerproductcode = ?");
+		mysqli_stmt_bind_param($stmt, 's', $ppCode);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_bind_result($stmt, $count);
+		mysqli_stmt_fetch($stmt);
+		mysqli_stmt_close($stmt);
+		return $count;
+	}
+	
+	function excelPartnerProductInsert($ppCode, $pCode, $cateCode, $ppName, $ppUrl, $ppPrice ) {
+		$query = "INSERT INTO tpartnerProductInfo VALUES(?, ?, ?, ?, ?, ?, SYSDATE(), SYSDATE(), null)";
+		$stmt = mysqli_prepare($this->link, $query);
+		mysqli_stmt_bind_param($stmt, 'ssdssd', $ppCode, $pCode, $cateCode, $ppName, $ppUrl, $ppPrice);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_close($stmt);
+	}
+	
+	function excelPartnerProductUpdate($ppCode, $cateCode, $ppName, $ppUrl, $ppPrice ) {
+		$query = "UPDATE tpartnerProductInfo SET categorycode = ?, partnerproductname = ?, partnerproducturl = ?, "
+				."partnerproductprice = ?, partnerproductmodifydate = SYSDATE() WHERE partnerproductcode = ?";
+		$stmt = mysqli_prepare($this->link, $query);
+		mysqli_stmt_bind_param($stmt, 'dssds', $cateCode, $ppName, $ppUrl, $ppPrice, $ppCode);
+		mysqli_stmt_execute($stmt);
+		mysqli_stmt_close($stmt);
+	}
+	
 }
 
 

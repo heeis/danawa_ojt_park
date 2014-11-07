@@ -9,7 +9,8 @@
 	
 	$oDnwInput = new DNWInput();
 	$oDnwInput->setInjectionPattern(true);
-	$oDnwInput->removeInjectionPattern(array(".",":","/","?","=")); // URL에서 . : / ?
+	$oDnwInput->setHtmlSpecialchars(false);
+	$oDnwInput->removeInjectionPattern(array(".",":","/","?","=","_","&","")); // URL에서 . : / ?
 	if ($req == "POST") {
 	   $aPostResult = $oDnwInput->allPost(false);
 	   $mode = $aPostResult['mode'];
@@ -17,13 +18,10 @@
 	   $aGetResult = $oDnwInput->allGet(false);
 	   $mode = $aGetResult['mode'];
 	}
-	var_export($aPostResult);
 	$ppManager = new partnerProductManager(null);
 	
 	if ($mode == 'insert') {
-		var_export($aPostResult);
 		$res = $ppManager->partnerProductInsert($aPostResult);
-		echo "res : ".$res;
 		if($res == 1){
 			echo "<script>alert('추가성공'); location.href='partnerproduct.php';</script>";
 		} else {
@@ -32,7 +30,6 @@
 	 
 	} else if ($mode == 'update') {
 		$res = $ppManager->partnerProductUpdate($aPostResult);
-		echo "res : ".$res;
 		if($res == 1){
 			echo "<script>alert('수정성공'); location.href='partnerproduct.php';</script>";
 		} else {
