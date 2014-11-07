@@ -38,15 +38,12 @@ class partnerProductManager {
 		
 		$count = $this->linkManager->partnerProductLinkCount($req);
 		if($count == 0) { // 미링크상품
-			echo '미링크';
 			$res = $this->ppDAO->partnerProductUpdate($req);
 		} else if ($count > 0) { // 링크상품
-			echo '링크';
 			// 가격갱신 될 경우 수정 후 최저가프로그램	
 			$res = $this->ppDAO->partnerProductUpdate($req);
 			$resArr = $this->linkManager->lowerStandardFind($pCode, $ppCode); // 해당상품과 링크중인 기준상품 정보를 가져옴
 			for($i = 0; $i < count($resArr); $i++) {
-				echo $resArr[$i];
 				$this->lowest->lowestPrice($resArr[$i]); // 가져온 기준상품에 전부 최저가갱신
 			}
 		}

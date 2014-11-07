@@ -268,7 +268,7 @@ function pageSet(page, table, cateno) {
 	        	///////////// 리스트 뿌려주기 //////////
 	        	$("#right_table").empty(); 
 	        	$("#right_table").append("<tr class='h_tr'>"
-	    	        	+"<td width='3%'><input type=checkbox ></td>"
+	    	        	+"<td width='3%'><input id='m_check' onclick='checkAll()' type=checkbox ></td>"
 						+"<td width='11%'>협력사</td>"
 						+"<td width='10%'>카테고리</td>"
 						+"<td width='40%'><a href=javascript:listSort('unlink','partner','"+cateno+"')>협력사상품명"+updown[sPartner]+"</a></td>"
@@ -331,7 +331,7 @@ function pageSet(page, table, cateno) {
 	        	///////////// 리스트 뿌려주기 //////////
 	        	$("#right_table").empty(); 
 	        	$("#right_table").append("<tr class='h_tr'>"
-	        			+"<td width='3%'><input type=checkbox></td>"
+	        			+"<td width='3%'><input type=checkbox id='m_check' onclick='checkAll()'></td>"
 						+"<td width='11%'>협력사</td>"
 						+"<td width='10%'>카테고리</td>"
 						+"<td width='40%'><a href=javascript:listSort('link','partner','"+cateno+"')>협력사상품명"+updown[sPartner]+"</a></td>"
@@ -398,7 +398,7 @@ function pageSet(page, table, cateno) {
 	        	///////////// 리스트 뿌려주기 //////////
 	        	$("#right_table").empty(); 
 	        	$("#right_table").append("<tr class='h_tr'>"
-	        			+"<td width='3%'><input type=checkbox></td>"
+	        			+"<td width='3%'><input type=checkbox id='m_check' onclick='checkAll()'></td>"
 						+"<td width='11%'>협력사</td>"
 						+"<td width='10%'>카테고리</td>"
 						+"<td width='40%'><a href=javascript:listSort('selectLink','partner','"+cateno+"')>협력사상품명"+updown[sPartner]+"</a></td>"
@@ -434,6 +434,14 @@ function pageSet(page, table, cateno) {
 	});
 }
 
+function checkAll() {
+	if($("input[id=m_check]").is(":checked")){
+		$("input[name=table_check]:checkbox").attr("checked", true);
+	} else {
+		$("input[name=table_check]:checkbox").attr("checked", false);
+	}
+}
+
 function link() {
 	var ppCode = '';
 	var stanCode = $("input[name=table_radio]:checked").val();	
@@ -445,6 +453,10 @@ function link() {
 		}
 	});
 	
+	if(ppCode == '' || stanCode ==null) {
+		 alert("기준상품과 협력사상품을 선택해주세요.")
+		 return;
+	}
 	 $.ajax({      
         type:"POST",  
         url:"http://ojt2.com/ajaxLink.php",      
@@ -492,7 +504,7 @@ function leftImageShow(stancode, e) {
 	$("#leftImgDiv").css("top", 250+e.offsetTop);
 	$("#leftImgDiv").css("left", 50+e.offsetLeft);
 	if($("#leftImgDiv").css("display") == "none"){
-		$("#leftImg").attr("src", "http://image.ojt2.com/productimage/"+stancode+".jpg");
+		$("#leftImg").attr("src", "http://image.ojt2.com/productimage/"+stancode+"_00.jpg");
 		$("#leftImgDiv").css("display", "block");
 	} else {
 		$("#leftImgDiv").css("display", "none");
@@ -603,8 +615,8 @@ function setComma(num){
   </div>
   <div style="float: left; width: 100%">
   <p align="center"> 
-  <input type="button" id="link_btn" value="링크생성" onclick="link()">
-  <input type="button" id="unlink_btn" value="링크해제" onclick="unlink()">
+  <input type="button" id="link_btn" value="링크생성" onclick="link()" disabled="disabled">
+  <input type="button" id="unlink_btn" value="링크해제" onclick="unlink()" disabled="disabled">
   </p>
   </div>
 </div>

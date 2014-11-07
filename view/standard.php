@@ -64,15 +64,17 @@ function submitCheck() {
 	} 
 
 	var url_check = /((http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\wㄱ-ㅎㅏ-ㅣ가-힣\;\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?)/g;
-	if( !url_check.test($("input[name=sourceurl]").val()) ) {
-		alert('출처URL형식에서 벗어납니다.');
+	if($("input[name=sourceurl]").val().trim() != 0) {
+		if( !url_check.test($("input[name=sourceurl]").val()) ) {
+			alert('출처URL형식에서 벗어납니다.');
+			return;
+		}
+		if ($("input[name=sourceurl]").val().trim().length > 600){
+			alert('출처URL은 최대 600자까지 입력가능합니다.');
+			return;
+		}
 	}
-	if ($("input[name=sourceurl]").val().trim().length > 600){
-		alert('출처URL은 최대 600자까지 입력가능합니다.');
-		return;
-	}
-	
-	alert(!url_check.test($("input[name=sourceurl]").val()));
+
 	if ($("input[name=imagesource]:checked").val() == '협력사선택') {
 		var select = $("select[name=partnerSelect]").val();
 		$("input[name=imagesource]:checked").attr('value', select);
@@ -96,6 +98,10 @@ function submitCheck() {
 	//alert('전송');
 	$("form[name=stan_frm]").submit();
 }
+
+function cancel() {
+	location.href='productlink.php';
+}
 </script>
 </head>
 <body>
@@ -106,7 +112,7 @@ function submitCheck() {
 
 <center>
 <p align="left" style="margin-left: 10%;">
-	# 기준상품등록 <a href="standardModify.php?code=11">수정테스트용</a>
+	# 기준상품등록
 </p>
 <form name=stan_frm enctype="multipart/form-data" action="standardProcess.php" method="post">
 <input type="hidden" name="mode" value="insert">
@@ -172,7 +178,7 @@ function submitCheck() {
 </center>
 <p align="center">
 	<input type="button" value="추가" onclick="submitCheck()">
-	<input type="button" value="취소">
+	<input type="button" value="취소" onclick="cancel()">
 </p>
 </div>
 <div style="height:80px; width: 100%;">

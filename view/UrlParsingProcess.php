@@ -51,7 +51,6 @@
 	}
 	
 	if($pCode == 'EE715') {
-		echo '옥션파싱';
 		$ppImageUrl = $html->find('img[id=ucImageNavigator_himgBig1]')[0]->src; // 옥션 이미지URL (협력상품정보)
 		
 		$ppPrice = $html->find('input[name=hddnDiscountSellingPrice]')[0]->value; // 상품 가격
@@ -63,7 +62,6 @@
 		$ppName = trim(iconv("EUC-KR", "UTF-8", $ppName)); // 협력사상품명 (협력사상품정보)
 		
 	} else if($pCode == 'TH201') {
-		echo '11번가파싱';
 		$ppImageUrl = $html->find('img[id=bigImg]')[0]->src;
 		
 		for($i = 0; $i < count($html->find('meta')); $i++) {
@@ -80,9 +78,6 @@
 		exit();
 	}
 	
-	echo 'imageUrl : ' . $ppImageUrl . "<br>";
-	echo 'price : ' . $ppPrice . "<br>";
-	echo 'name : ' . $ppName . "<br>";
  	$ppArr = array(
 			'ppCode'=>$ppCode,
 			'pCode'=>$pCode,
@@ -99,7 +94,6 @@
 
 
 	$res = $ppManager->partnerProductInsert($ppArr);
-	echo '협력사상품결과:'.$res;
 	if($res != 1) {
 		echo "<script>alert('협력사 상품 등록 실패'); history.back();</script>";
 		exit();
@@ -110,9 +104,28 @@
 	$sArr = array(
 			'maxCode'=>$maxCode,
 			'category'=>$category,
-			'stanname'=>$ppName
+			'stanname'=>$ppName,
+			'image'=>$maxCode.'_00.jpg'
 	);
 	$res = $stanManager->parsStandardInsert($sArr);
+	
+
+	// Open the file to get existing content
+	$data = file_get_contents($ppImageUrl);
+	// New file
+	$new = '/var/www/upload/productimage/'.$maxCode.'_00.jpg';
+	// Write the contents back to a new file
+	file_put_contents($new, $data);
+	
+	// 썸네일 생성
+	$oldsize = getimagesize($new);
+	$new_img = imagecreatetruecolor(80, 80);
+	//$file = strtolower($file);
+	
+	$origin_img = imagecreatefromjpeg($new);
+	imagecopyresampled($new_img, $origin_img, 0, 0, 0, 0, 80, 80, $oldsize[0], $oldsize[1]);
+	imagejpeg($new_img, '/var/www/upload/productimage/' . $maxCode . "_80.jpg"); // 썸네일 이미지는 원본업로드 파일명 앞에 thum을 추가 후 저장
+			
 	
 	// 협력사상품, 기준상품 링크
 	$res = $linkManager->linkLinkage($maxCode, $ppCode, $pCode);

@@ -23,7 +23,7 @@ $ppArr = split('/', $pp);
 for($i = 0; $i < count($ppArr); $i++) {
 	$p = split('_', $ppArr[$i]);
 	$r = $linkMgr->linkLinkage($stanCode, $p[1], $p[0]);
-	$a = $a . $r;
+	
 }
 $lowestPrice->lowestPrice($stanCode);
 

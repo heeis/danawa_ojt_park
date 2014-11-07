@@ -33,9 +33,7 @@ class lowestPriceProgram {
 		mysqli_stmt_execute($stmt);
 		mysqli_stmt_bind_result($stmt, $avg, $min, $count);
 		mysqli_stmt_fetch($stmt);
-		//print_r($stmt);
 		mysqli_stmt_close($stmt);
-		echo '<br>low:'.$avg .':'. $min .':'. $count;
 		
 		$query = "UPDATE 
 						tstandardInfo 

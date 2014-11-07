@@ -31,11 +31,10 @@ function parseSubmit() {
 		alert('Url형식에서 벗어납니다.');
 		return;
 	}
-	alert("전송");
-	//$('form[name=pars_frm]').submit();
+	$('form[name=pars_frm]').submit();
 }
 function cancel() {
-	location.href='productlink.php';
+	location.href='productLink.php';
 }
 </script>
 </head>

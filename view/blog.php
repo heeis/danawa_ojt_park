@@ -61,7 +61,7 @@ function addList(page) {
 			  	+"<tr>"
 			  	+"<td width='20%' align='center'><img src='http://img.danawa.com/cmpny_info/images/"+data[0][i][2]+"_logo.gif'></td>"
 			  		+ str
-			  		+"<td width='20%' align='center' rowspan='3'><a href='"+data[0][i][4]+"' target='_blank'><img src='test/btn.jpg'><a></td>"
+			  		+"<td width='20%' align='center' rowspan='3'><a href='"+data[0][i][4]+"' target='_blank'><img src='http://image.ojt2.com/image/btn.jpg'><a></td>"
 			  		+"</tr>"
 			  		+"<tr>"
 			  		+"<td></td>"
@@ -120,7 +120,7 @@ function winOpen() {
   <div id="blog_main">
   	<div style="float:left; width: 210px; height: 250px; margin-left: 10px;">
   		<div style="width: 210px; padding-left: 22px;">
-  			<img width="170" height="170" src="http://image.ojt2.com/image/<?=$stanInfoResult[2] == '' ? 'noimage.gif' : $stanInfoResult[2]?>">
+  			<img width="170" height="170" src="http://image.ojt2.com/productimage/<?=$stanInfoResult[2] == '' ? 'noimage.gif' : $stanInfoResult[2]?>">
   		</div>
   		<div style="width: 210px;">
   		<p align="center" style="font-size: 8pt; color: rgb(139,139,139);">
@@ -152,7 +152,7 @@ function winOpen() {
   			<font style="font-size: 26pt; font-weight: bold; margin-left: 10px; margin-right: 30px; color:rgb(139,139,139)">
   				<?=number_format($ppListResult[0][1])?>원
   			</font> 
-  			<a href="<?=$ppListResult[0][4]?>" target="_blank"><img src="test/btn.jpg"></a>
+  			<a href="<?=$ppListResult[0][4]?>" target="_blank"><img src="http://image.ojt2.com/image/btn.jpg"></a>
   		</div>
   		<div style="border-top: 1px solid rgb(139,139,139); ">
   			<table style="font-size: 10pt;">
@@ -176,14 +176,14 @@ function winOpen() {
   			(다나와 평균가:<?=number_format($ppTotalAvg[1])?>원)
   			<div onclick="moveTop()" style="float: right; border: 1px solid; border-top:0; cursor:pointer; font-size: 8pt;">
   			<span style="">&nbsp;&nbsp;쇼핑몰별 <?=$ppTotalAvg[0]?>개 더보기&nbsp;&nbsp;</span>
-  			<span style="border-left: 1px solid rgb(139,139,139);" >&nbsp;<img src="test/plus.gif">&nbsp;</span>
+  			<span style="border-left: 1px solid rgb(139,139,139);" >&nbsp;<img src="http://image.ojt2.com/image/plus.gif">&nbsp;</span>
   			</div>
   		</div>
   	<?php 
   	} else {
   	?>
   		<div>
-  			<img width="450" height="160" alt="" src="test/img6.jpg" style="margin-bottom: 10px;">
+  			<img width="450" height="160" alt="" src="http://image.ojt2.com/image/img6.jpg" style="margin-bottom: 10px;">
   		</div>	
   	<?php 
   	}
@@ -220,7 +220,7 @@ function winOpen() {
   			<?php } else { ?>
   			<td width="60%"><b><?=number_format($res[1])?>원</b></td>
   			<?php }?>
-  			<td width="20%" align="center" rowspan="3"><a href="<?=$res[4]?>" target="_blank"><img src="test/btn.jpg"></a></td>
+  			<td width="20%" align="center" rowspan="3"><a href="<?=$res[4]?>" target="_blank"><img src="http://image.ojt2.com/image/btn.jpg"></a></td>
   		</tr>
   		<tr>
   			<td></td>
@@ -252,7 +252,7 @@ function winOpen() {
   <div style="width:670px; border-top: 2px solid; font-size:8pt; color: rgb(139,139,139); padding-left: 30px;">
   <br>
   		다나와는 중개자로 상품의 가격 및 판매 배송은 해당 쇼핑몰의 책임하에 운영되고 있습니다.&nbsp;&nbsp; 
-  		<a href="javascript:winOpen()"><img src="test/btn_respon2.gif" style="margin-top: 3px;"></a><br><br>
+  		<a href="javascript:winOpen()"><img src="http://image.ojt2.com/image/btn_respon2.gif" style="margin-top: 3px;"></a><br><br>
   
   	사업자등록번호 : 117-81-40065ㅣ통신판매 양천 918호ㅣTel : 1688-2451ㅣE-mail : webmaster@danawa.com<br>
   	주소 : (우)158-718 서울특별시 양천구 목동동로 233-1, 501 (목동, 드림타워)<br>

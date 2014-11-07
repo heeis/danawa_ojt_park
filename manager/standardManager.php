@@ -82,7 +82,7 @@
 					'categoryCode'=>$arr['category'],
 					'standardName'=>$arr['stanname'],
 					'standardImageSource'=>null,
-					'standardImage'=>null,
+					'standardImage'=>$arr['image'],
 					'standardSourceUrl'=>null,
 					'standardMakeDate'=>null,
 					'standardExplain'=>null,
@@ -100,10 +100,8 @@
 		
 		// 기준상품수정
 		function standardModify($req, $files) {
-			echo "<br>". $req['category'] ."<br>";
 			$filename = $req['stancode'] . "_00.jpg";
 			if($files['name'] != null) {
-				echo '이미지업로드';
 				// 파일업로드
 				$dir =  "/var/www/upload/productimage/";
 				
@@ -132,15 +130,15 @@
 				imagejpeg($new_img, $dir . $req['stancode'] . "_80.jpg"); // 썸네일 이미지는 원본업로드 파일명 앞에 thum을 추가 후 저장
 				
 			} else {
-				$filename = $req['imagesource'];
+				$filename = $req['oldimage'];
 			}
-			echo '이미지값 : '.$filename.'  category : '.$req['category']."<br>";
+			
 			$arr = array(
 					'standardCode'=>$req['stancode'],
 					'categoryCode'=>$req['category'],
 					'standardName'=>$req['stanname'],
-					'standardImageSource'=>$filename,
-					'standardImage'=>$req['oldimage'],
+					'standardImageSource'=>$req['imagesource'],
+					'standardImage'=>$filename,
 					'standardSourceUrl'=>$req['sourceurl'],
 					'standardMakeDate'=>$req['makedate'],
 					'standardExplain'=>$req['explain']
@@ -156,20 +154,16 @@
 			mysqli_query($this->link, "BEGIN");
 			$result = $this->linkManager->standardLinkDelete($stanCode);
 			if($result) {
-				echo '링크삭제실패';
 				$success = false;
 			}
 			$result = $this->standardDAO->standardDelete($stanCode);
 			if($result) {	
-				echo '기준삭제실패';
 				$success = false;
 			}
 			if($success) {
-				echo 'commit';
 				mysqli_query($this->link, "COMMIT");
 				return $success;
 			} else {
-				echo 'rollback';
 				mysqli_query($this->link, "ROLLBACK");
 				return $success;
 			}

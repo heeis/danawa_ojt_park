@@ -28,6 +28,7 @@
 <script type="text/javascript">
 function submitCheck(mode) {
 	$("input[name=mode]").attr('value', mode);
+	
 	if(mode == 'update'){
 		if ($("input[name=stanname]").val().trim() == ''){
 			alert('상품명을 입력하세요.');
@@ -53,7 +54,7 @@ function submitCheck(mode) {
 		// 정규식  198001~201912 까지 입력가능
 		var num_check = /^(198\d{1}|200\d|201[0-9])(0[1-9]|1[0-2])*$/;
 		if($("input[name=makedate]").val().trim() != ''){
-			if(!num_check.test($("#makedate").val())){
+			if(!num_check.test($("input[name=makedate]").val())){
 				alert('예)2014년 9월 -> 201409 의 형식에 맞게 입력해주세요.');
 				$("#makedate").focus();
 				return;
@@ -64,6 +65,7 @@ function submitCheck(mode) {
 		if($("input[name=sourceurl]").val().trim() != ''){
 			if( !url_check.test($("input[name=sourceurl]").val()) ) {
 				alert('출처URL형식에서 벗어납니다.');
+				return;
 			}
 			if ($("input[name=sourceurl]").val().trim().length > 600){
 				alert('출처URL은 최대 600자까지 입력가능합니다.');
@@ -102,6 +104,7 @@ function submitCheck(mode) {
 function cancel() {
 	location.href='productlink.php';
 }
+
 </script>
 </head>
 <body>
@@ -117,6 +120,7 @@ function cancel() {
 <form name=stan_frm enctype="multipart/form-data" action="standardProcess.php" method="post">
 <input type="hidden" name="stancode" value="<?=$stanInfoRes[0]?>">
 <input type="hidden" name="oldimage" value="<?=$stanInfoRes[4]?>">
+<input type="hidden" name="cate" value="">
 <input type="hidden" name="mode">
 <table border="1">
 	<tr>
@@ -131,8 +135,8 @@ function cancel() {
 	<tr>
 		<td>카테고리</td>
 		<td colspan="2">
-			<select size=7 name="category" style="width: 400px;">
-				<option>[대분류]</option>
+			<select size=7 name="category" >
+				<option value="[대분류]">[대분류]</option>
 			<?php 
   			while ($res = mysqli_fetch_row($cateRes)) {
 				if($res[0] == $stanInfoRes[2]) {
@@ -150,8 +154,8 @@ function cancel() {
 		</td>
 	</tr>
 	<tr>
-		<td rowspan=2>상품이미지<?=$stanInfoRes[4]?></td>
-		<td><img width="50" height="50" src="http://image.ojt2.com/productimage/<?=$stanInfoRes[4]?>"></td>
+		<td rowspan=2>상품이미지</td>
+		<td rowspan="2"><img width="80" height="80" src="http://image.ojt2.com/productimage/<?=$stanInfoRes[4]?>"></td>
 		<td rowspan="2">
 			<input type="radio" name="imagesource" value="" <?php if($stanInfoRes[3] == '') echo "checked='checked'";?>>없음
 			<input type="radio" name="imagesource" value="다나와제작" <?php if($stanInfoRes[3] == '다나와제작') echo "checked='checked'";?>>다나와제작 
@@ -174,7 +178,8 @@ function cancel() {
 			?>	
 			</select>
 			<br>
-			<input type="file" name="image"> 출처 URL <input type="text" name="sourceurl" size="50" value="<?=$stanInfoRes[5]?>">
+			<br>
+			<input type="file" name="image" value="" onchange="cate()" > 출처 URL <input type="text" name="sourceurl" size="50" value="<?=$stanInfoRes[5]?>">
 		</td>
 	</tr>
 	<tr>

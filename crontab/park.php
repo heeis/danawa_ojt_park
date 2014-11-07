@@ -5,15 +5,12 @@ $db_hostname = 'localhost';
 $db_database = 'ojt';
 $db_username = 'root';
 $db_password = '1234';
-echo "1";
 $link = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
 mysqli_query($link,"set session character_set_connection=utf8;");
 mysqli_query($link,"set session character_set_results=utf8;");
 mysqli_query($link,"set session character_set_client=utf8;");
-echo "1";
 $query = "SELECT standardCode FROM tstandardInfo";
 $result = mysqli_query($link, $query);
-echo "1";
 while ($res = mysqli_fetch_row($result)) {
 		$query = "SELECT
 						ROUND(AVG(partnerProductPrice),0),
@@ -31,7 +28,6 @@ while ($res = mysqli_fetch_row($result)) {
 		mysqli_stmt_execute($stmt);
 		mysqli_stmt_bind_result($stmt, $avg, $min, $count);
 		mysqli_stmt_fetch($stmt);
-		//print_r($stmt);
 		mysqli_stmt_close($stmt);
 		
 		$query = "UPDATE 

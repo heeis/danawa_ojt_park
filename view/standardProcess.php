@@ -3,8 +3,6 @@
 	require_once '../lib/DNWInput.php';
 	$standardManager = new standardManager();
 	
-	echo '이미지 1 : '.$_POST['oldimage'];
-	
 	$oDnwInput = new DNWInput();
 	$oDnwInput->setInjectionPattern(true);
 	$oDnwInput->removeInjectionPattern(array(".",":","/","?","_")); // URL에서 . : / ?

@@ -54,6 +54,10 @@ function submitCheck(mode) {
 	}
 	$("form[name=pp_frm]").submit();
 }
+
+function cancel() {
+	location.href='productlink.php';
+}
 </script>
 </head>
 
@@ -144,7 +148,7 @@ function submitCheck(mode) {
 <p align="center">
 	<input type="button" value="수정" onclick="submitCheck('update')">
 	<input type="button" value="삭제" onclick="submitCheck('delete')">
-	<input type="button" value="취소">
+	<input type="button" value="취소" onclick="cancel()">
 </p>
 </div>
 <!-- content 끝 -->

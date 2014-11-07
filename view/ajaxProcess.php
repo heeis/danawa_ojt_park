@@ -1,6 +1,7 @@
 <?php
 require_once '../manager/standardManager.php';
 require_once '../manager/partnerProductManager.php';
+require_once '../mysql/mysqlConn.php';
 require_once '../lib/DNWInput.php';
 
 $oDnwInput = new DNWInput();
@@ -8,8 +9,10 @@ $oDnwInput->setInjectionPattern(true);
 $oDnwInput->removeInjectionPattern(array("/","_"));
 $aPostResult = $oDnwInput->allPost(false);
 
-$stanManager = new standardManager();
-$ppManager = new partnerProductManager();
+$dbConn = new mysqlConn();
+$link = $dbConn->connect();
+$stanManager = new standardManager($link);
+$ppManager = new partnerProductManager($link);
 
 $page_set = 20;
 

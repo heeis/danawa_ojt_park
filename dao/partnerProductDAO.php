@@ -52,12 +52,11 @@ class partnerProductDAO {
 	}
 	
 	function partnerProductUpdate($req) {
-		print_r($req);
 		$this->utf8();
-		if($arr['ppPrice'] == ''){
+		if($req['ppPrice'] == ''){
 			$price = 0;
 		} else {
-			$price = $arr['ppPrice'];
+			$price = $req['ppPrice'];
 		}
 		$query = "UPDATE 
 						tpartnerProductInfo 
@@ -110,8 +109,6 @@ class partnerProductDAO {
 	}
 	
 	function partnerProductDelete($pCode, $ppCode) {
-		echo $pCode;
-		echo $ppCode;
 		$query = "DELETE FROM
 						tpartnerProductInfo
 				  WHERE
@@ -123,7 +120,7 @@ class partnerProductDAO {
 		mysqli_stmt_execute($stmt);
 		$res = mysqli_stmt_affected_rows($stmt);
 		mysqli_stmt_close($stmt);
-		echo "res : ".$res;
+	
 		return $res;
 	}
 	

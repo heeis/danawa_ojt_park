@@ -23,7 +23,6 @@ class linkDAO {
 		mysqli_stmt_execute($stmt);
 		$res = mysqli_error($this->link);
 		mysqli_stmt_close($stmt);
-		echo 'Linkres = '.$res.'standcode:'.$stanCode.":";
 		return $res;
 	}
 	
@@ -39,7 +38,7 @@ class linkDAO {
 		$stmt = mysqli_prepare($this->link, $query);
 		mysqli_stmt_bind_param($stmt, 'ss', $pCode, $ppCode);
 		mysqli_stmt_execute($stmt);
-		$res = mysqli_affected_rows($link);
+		$res = mysqli_affected_rows($this->link);
 		return $res;
 	}
 	
@@ -109,7 +108,6 @@ class linkDAO {
 		while(mysqli_stmt_fetch($stmt)) {
 			array_push($arr, $stanCode);
 		}
-		//echo '<br>'.$arr[0].':'.$arr[1];
 		return $arr;
 	}
 	

@@ -30,7 +30,6 @@ class standardDAO {
 							$arr['standardSourceUrl'], $arr['standardMakeDate'], $arr['standardExplain']);
 		mysqli_stmt_execute($stmt);
 		$res = mysqli_stmt_affected_rows($stmt);
-		print_r($stmt);
 		mysqli_stmt_close($stmt);
 		return $res;
 	}
@@ -59,7 +58,8 @@ class standardDAO {
 						standardModifyDate = SYSDATE(),
 			   			standardImageSource = ?, 
 						standardImage = ?, 
-						standardSourceUrl = ?, standardMakeDate = ?, 
+						standardSourceUrl = ?, 
+						standardMakeDate = ?, 
 						standardExplain = ?
 			   	  WHERE 
 						standardCode = ?";
@@ -74,7 +74,6 @@ class standardDAO {
 								$arr['standardExplain'], 
 								$arr['standardCode']);
 		$res = mysqli_stmt_execute($stmt);
-		print_r($stmt);
 		mysqli_stmt_close($stmt);
 		return $res;
 	}
